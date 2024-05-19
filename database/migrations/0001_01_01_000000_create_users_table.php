@@ -17,11 +17,11 @@ return new class extends Migration
             $table->string('surname')->nullable();
             $table->string('patronymic')->nullable();
             $table->string('phone')->unique()->nullable();
-            $table->enum('gender', ["M","F"])->nullable();
             $table->date('birthdate')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('sex');
             $table->foreignId('role_id')->constrained();
             $table->rememberToken();
             $table->timestamps();

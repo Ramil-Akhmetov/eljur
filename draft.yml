@@ -7,12 +7,12 @@ models:
 #    email: string unique
 #    email_verified_at: nullable timestamp
 #    phone: string unique
-#    gender: enum:М,Ж
+#    sex: boolean
 #    birthdate: date
 #    role_id: id foreign
 
   Role:
-    name: string
+    name: string unique
 
   Student:
     code: string
