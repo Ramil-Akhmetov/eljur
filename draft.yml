@@ -1,64 +1,64 @@
 models:
-  User:
-    name: string
-    surname: string
-    patronymic: string
-    password: string
-    email: string:unique
-    email_verified_at: nullable timestamp
-    phone: string:unique
-    gender: string:1
-    birthdate: date
+#  User:
+#    name: string
+#    surname: string
+#    patronymic: string
+#    password: string
+#    email: string unique
+#    email_verified_at: nullable timestamp
+#    phone: string unique
+#    gender: enum:М,Ж
+#    birthdate: date
 
   Student:
     code: string
-    user_id: id
-    group_id: id
+    user_id: id foreign
+    group_id: id foreign
 
   Teacher:
-    user_id: id
+    user_id: id foreign
     relationships:
       belongsToMany: Subject
 
   Specialty:
-    name: string:unique
-    code: string:unique
+    name: string unique
+    code: string unique
 
   Group:
-    code: string:unique
+    code: string unique
     semester: number
-    specialty_id: id
-    teacher_id: id
+    specialty_id: id foreign
+    teacher_id: id foreign
 
   Classroom:
-    name: string:unique
+    name: string unique
     number: number:unique
 
   LessonType:
-    short_name: string:unique
-    name: string:unique
+    short_name: string unique
+    name: string unique
 
   AttendanceOption:
-    short_name: string:unique
-    name: string:unique
+    short_name: string unique
+    name: string unique
 
   Subject:
-    name: string:unique
+    name: string unique
     relationships:
       belongsToMany: Teacher
 
   Lesson:
     topic: string
     timestamp: timestamp
-    teacher_id: id
-    group_id: id
-    subject_id: id
-    classroom_id: id
-    lesson_type_id: id
+    teacher_id: id foreign
+    group_id: id foreign
+    subject_id: id foreign
+    classroom_id: id foreign
+    lesson_type_id: id foreign
 
   Attendance:
     mark: number
-    attendance_option_id: id
-    student_id: id
-    lesson_id: id
+    attendance_option_id: id foreign
+    student_id: id foreign
+    lesson_id: id foreign
 
