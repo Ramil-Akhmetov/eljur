@@ -1,14 +1,14 @@
 models:
-#  User:
-#    name: string
-#    surname: string
-#    patronymic: string
-#    password: string
-#    email: string
-#    email_verified_at: nullable timestamp
-#    phone: string
-#    gender: string:1
-#    birthdate: date
+  User:
+    name: string
+    surname: string
+    patronymic: string
+    password: string
+    email: string:unique
+    email_verified_at: nullable timestamp
+    phone: string:unique
+    gender: string:1
+    birthdate: date
 
   Student:
     code: string
@@ -21,29 +21,29 @@ models:
       belongsToMany: Subject
 
   Specialty:
-    name: string
-    code: string
+    name: string:unique
+    code: string:unique
 
   Group:
-    code: string
+    code: string:unique
     semester: number
     specialty_id: id
     teacher_id: id
 
   Classroom:
-    name: string
-    number: number
+    name: string:unique
+    number: number:unique
 
   LessonType:
-    short_name: string
-    name: string
+    short_name: string:unique
+    name: string:unique
 
   AttendanceOption:
-    short_name: string
-    name: string
+    short_name: string:unique
+    name: string:unique
 
   Subject:
-    name: string
+    name: string:unique
     relationships:
       belongsToMany: Teacher
 
