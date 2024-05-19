@@ -40,8 +40,8 @@ class RegisterController extends BackpackRegisterController
      */
     protected function create(array $data)
     {
-        $user_model_fqn = config('backpack.base.user_model_fqn');
-        $user = new $user_model_fqn();
+//        $user_model_fqn = config('backpack.base.user_model_fqn');
+//        $user = new $user_model_fqn();
 
         $invite_code = InviteCode::where('code', $data['code'])->first();
         $new_user = User::find($invite_code->user_id);

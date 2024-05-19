@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'surname' => fake()->lastName(),
             'patronymic' => fake()->firstName(),
             'phone' => fake()->phoneNumber(),
-            'gender' => $this->faker->randomElement(["\u041c","\u0416"]),
+            'gender' => $this->faker->randomElement(["M","F"]),
             'birthdate' => fake()->date(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),

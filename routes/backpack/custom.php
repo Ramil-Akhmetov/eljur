@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Route;
 // Routes you generate using Backpack\Generators will be placed here.
 
 
+Route::get('admin/register', [\App\Http\Controllers\Admin\Auth\RegisterController::class, 'showRegistrationForm'])->name('backpack.auth.register')->middleware('web');
+Route::post('admin/register', [\App\Http\Controllers\Admin\Auth\RegisterController::class, 'register'])->name('backpack.auth.register')->middleware('web');
+
 Route::group([
     'prefix' => config('backpack.base.route_prefix', 'admin'),
     'middleware' => array_merge(
@@ -17,5 +20,5 @@ Route::group([
     ),
     'namespace' => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
-    Route::get('admin/register', [\App\Http\Controllers\Admin\Auth\RegisterController::class, 'showRegistrationForm'])->name('backpack.auth.register');
+
 }); // this should be the absolute last line of this file
