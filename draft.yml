@@ -1,15 +1,15 @@
 models:
-  User:
-    name: string
-    surname: string
-    patronymic: string
-    password: string
-    email: string unique
-    email_verified_at: nullable timestamp
-    phone: string unique
-    gender: enum:М,Ж
-    birthdate: date
-    role_id: id foreign
+#  User:
+#    name: string
+#    surname: string
+#    patronymic: string
+#    password: string
+#    email: string unique
+#    email_verified_at: nullable timestamp
+#    phone: string unique
+#    gender: enum:М,Ж
+#    birthdate: date
+#    role_id: id foreign
 
   Role:
     name: string
@@ -66,6 +66,6 @@ models:
     student_id: id foreign
     lesson_id: id foreign
 
-  InviteCodes:
+  InviteCode:
     code: string
     user_id: id foreign

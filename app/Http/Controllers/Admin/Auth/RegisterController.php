@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
+use App\Models\InviteCode;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\Auth\RegisterController as BackpackRegisterController;
 use Illuminate\Support\Facades\Validator;
 
@@ -41,11 +43,17 @@ class RegisterController extends BackpackRegisterController
         $user_model_fqn = config('backpack.base.user_model_fqn');
         $user = new $user_model_fqn();
 
-        return $user->create([
-            'email' => $data['email'],
-            backpack_authentication_column() => $data[backpack_authentication_column()],
-            'password' => bcrypt($data['password']),
-        ]);
+        $invite_code = InviteCode::where('code', $data['code'])->first();
+        $new_user = User::find($invite_code->user_id);
+        $invite_code->delete();
+
+        return $new_user;
+
+//        return $user->create([
+//            'email' => $data['email'],
+//            backpack_authentication_column() => $data[backpack_authentication_column()],
+//            'password' => bcrypt($data['password']),
+//        ]);
     }
 
     public function showRegistrationForm()
