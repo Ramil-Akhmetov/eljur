@@ -1,0 +1,32 @@
+models:
+#  User:
+#    name: string
+#    surname: string
+#    patronymic: string
+#    password: string
+#    email: string
+#    email_verified_at: nullable timestamp
+#    phone: string
+#    gender: string:1
+#    birthdate: date
+
+  Specialty:
+    name: string
+    code: string
+
+  Group:
+    code: string
+    semester: number
+    specialty_id: id
+
+#  Room:
+#    name: string
+#    number: number
+#
+#  LessonType:
+#    short_name: string
+#    name: string
+#
+#  AttendanceOption:
+#    short_name: string
+#    name: string
