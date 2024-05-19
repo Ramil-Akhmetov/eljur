@@ -10,6 +10,16 @@ models:
 #    gender: string:1
 #    birthdate: date
 
+  Student:
+    code: string
+    user_id: id
+    group_id: id
+
+  Teacher:
+    user_id: id
+    relationships:
+      belongsToMany: Subject
+
   Specialty:
     name: string
     code: string
@@ -18,15 +28,37 @@ models:
     code: string
     semester: number
     specialty_id: id
+    teacher_id: id
 
-#  Room:
-#    name: string
-#    number: number
-#
-#  LessonType:
-#    short_name: string
-#    name: string
-#
-#  AttendanceOption:
-#    short_name: string
-#    name: string
+  Classroom:
+    name: string
+    number: number
+
+  LessonType:
+    short_name: string
+    name: string
+
+  AttendanceOption:
+    short_name: string
+    name: string
+
+  Subject:
+    name: string
+    relationships:
+      belongsToMany: Teacher
+
+  Lesson:
+    topic: string
+    timestamp: timestamp
+    teacher_id: id
+    group_id: id
+    subject_id: id
+    classroom_id: id
+    lesson_type_id: id
+
+  Attendance:
+    mark: number
+    attendance_option_id: id
+    student_id: id
+    lesson_id: id
+
