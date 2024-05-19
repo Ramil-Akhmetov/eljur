@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('patronymic')->nullable();
             $table->string('phone')->unique()->nullable();
             $table->date('birthdate')->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('sex');
+            $table->string('password')->nullable();
+            $table->enum('sex', ['Мужчина', 'Женщина']);
             $table->foreignId('role_id')->constrained();
             $table->rememberToken();
             $table->timestamps();

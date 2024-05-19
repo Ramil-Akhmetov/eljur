@@ -40,20 +40,13 @@ class RegisterController extends BackpackRegisterController
      */
     protected function create(array $data)
     {
-//        $user_model_fqn = config('backpack.base.user_model_fqn');
-//        $user = new $user_model_fqn();
-
         $invite_code = InviteCode::where('code', $data['code'])->first();
-        $new_user = User::find($invite_code->user_id);
+        $user = User::find($invite_code->user_id);
+        $user->email = $data['email'];
+        $user->save();
         $invite_code->delete();
 
-        return $new_user;
-
-//        return $user->create([
-//            'email' => $data['email'],
-//            backpack_authentication_column() => $data[backpack_authentication_column()],
-//            'password' => bcrypt($data['password']),
-//        ]);
+        return $user;
     }
 
     public function showRegistrationForm()

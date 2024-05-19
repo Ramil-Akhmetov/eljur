@@ -1,0 +1,51 @@
+created:
+    - database/factories/RoleFactory.php
+    - database/factories/StudentFactory.php
+    - database/factories/TeacherFactory.php
+    - database/factories/SpecialtyFactory.php
+    - database/factories/GroupFactory.php
+    - database/factories/ClassroomFactory.php
+    - database/factories/LessonTypeFactory.php
+    - database/factories/AttendanceOptionFactory.php
+    - database/factories/SubjectFactory.php
+    - database/factories/LessonFactory.php
+    - database/factories/AttendanceFactory.php
+    - database/factories/InviteCodeFactory.php
+    - database/migrations/2024_05_19_204323_create_roles_table.php
+    - database/migrations/2024_05_19_204324_create_students_table.php
+    - database/migrations/2024_05_19_204325_create_teachers_table.php
+    - database/migrations/2024_05_19_204326_create_specialties_table.php
+    - database/migrations/2024_05_19_204327_create_groups_table.php
+    - database/migrations/2024_05_19_204328_create_classrooms_table.php
+    - database/migrations/2024_05_19_204329_create_lesson_types_table.php
+    - database/migrations/2024_05_19_204330_create_attendance_options_table.php
+    - database/migrations/2024_05_19_204331_create_subjects_table.php
+    - database/migrations/2024_05_19_204332_create_lessons_table.php
+    - database/migrations/2024_05_19_204333_create_attendances_table.php
+    - database/migrations/2024_05_19_204334_create_invite_codes_table.php
+    - database/migrations/2024_05_19_204335_create_subject_teacher_table.php
+    - app/Models/Role.php
+    - app/Models/Student.php
+    - app/Models/Teacher.php
+    - app/Models/Specialty.php
+    - app/Models/Group.php
+    - app/Models/Classroom.php
+    - app/Models/LessonType.php
+    - app/Models/AttendanceOption.php
+    - app/Models/Subject.php
+    - app/Models/Lesson.php
+    - app/Models/Attendance.php
+    - app/Models/InviteCode.php
+models:
+    Role: { name: 'string unique' }
+    Student: { code: string, user_id: 'id foreign', group_id: 'id foreign' }
+    Teacher: { user_id: 'id foreign', relationships: { belongsToMany: Subject } }
+    Specialty: { name: 'string unique', code: 'string unique' }
+    Group: { code: 'string unique', semester: number, specialty_id: 'id foreign', teacher_id: 'id foreign' }
+    Classroom: { name: 'string unique', number: 'number:unique' }
+    LessonType: { short_name: 'string unique', name: 'string unique' }
+    AttendanceOption: { short_name: 'string unique', name: 'string unique' }
+    Subject: { name: 'string unique', relationships: { belongsToMany: Teacher } }
+    Lesson: { topic: string, timestamp: timestamp, teacher_id: 'id foreign', group_id: 'id foreign', subject_id: 'id foreign', classroom_id: 'id foreign', lesson_type_id: 'id foreign' }
+    Attendance: { mark: number, attendance_option_id: 'id foreign', student_id: 'id foreign', lesson_id: 'id foreign' }
+    InviteCode: { code: string, user_id: 'id foreign' }
