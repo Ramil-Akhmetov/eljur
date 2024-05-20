@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\ClassroomRequest;
-use App\Http\Requests\ClassroomUpdateRequest;
+use App\Http\Requests\SpecialtyRequest;
+use App\Http\Requests\SpecialtyUpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class ClassroomCrudController
+ * Class SpecialtyCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class ClassroomCrudController extends CrudController
+class SpecialtyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -27,9 +27,9 @@ class ClassroomCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Classroom::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/classroom');
-        CRUD::setEntityNameStrings('кабинет', 'кабинеты');
+        CRUD::setModel(\App\Models\Specialty::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/specialty');
+        CRUD::setEntityNameStrings('специальность', 'специальности');
     }
 
     /**
@@ -41,13 +41,13 @@ class ClassroomCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::addColumn([
-            'name' => 'number',
-            'label' => 'Номер',
-            'type' => 'number',
-        ]);
-        CRUD::addColumn([
             'name' => 'name',
             'label' => 'Название',
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'code',
+            'label' => 'Код',
         ]);
     }
 
@@ -60,19 +60,19 @@ class ClassroomCrudController extends CrudController
     protected function setupCreateOperation($is_update = false)
     {
         if ($is_update) {
-            CRUD::setValidation(ClassroomUpdateRequest::class);
+            CRUD::setValidation(SpecialtyUpdateRequest::class);
         } else {
-            CRUD::setValidation(ClassroomRequest::class);
+            CRUD::setValidation(SpecialtyRequest::class);
         }
 
         CRUD::addField([
-            'name' => 'number',
-            'label' => 'Номер',
-            'type' => 'number',
-        ]);
-        CRUD::addField([
             'name' => 'name',
             'label' => 'Название',
+        ]);
+
+        CRUD::addField([
+            'name' => 'code',
+            'label' => 'Код',
         ]);
     }
 
