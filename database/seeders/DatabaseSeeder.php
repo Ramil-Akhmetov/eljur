@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use App\Models\StudentStatus;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -30,5 +31,9 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@email.com',
         ]);
+
+        StudentStatus::factory()->create(['name' => 'Отчислен']);
+        StudentStatus::factory()->create(['name' => 'Активен']);
+        StudentStatus::factory()->create(['name' => 'Переведен']);
     }
 }
