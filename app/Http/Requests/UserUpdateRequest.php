@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 
-class UserRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,14 +26,14 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'surname' => 'required|max:255',
-            'patronymic' => 'required|max:255',
-            'phone' => 'required|unique:users',
-            'email' => 'sometimes|unique:users',
-            'sex' => 'required',
-            'birthdate' => 'required|date',
-            'role' => 'required|exists:roles,id',
+            'name' => 'sometimes|max:255',
+            'surname' => 'sometimes|max:255',
+            'patronymic' => 'sometimes|max:255',
+            'phone' => 'sometimes|string|unique:users,phone,' . backpack_user()->id,
+            'email' => 'sometimes|string|email|unique:users,email,' . backpack_user()->id,
+            'sex' => 'sometimes',
+            'birthdate' => 'sometimes|date',
+            'role' => 'sometimes|exists:roles,id',
             'password' => 'sometimes',
         ];
     }
@@ -62,11 +62,15 @@ class UserRequest extends FormRequest
         ];
     }
 
+
     public function validated($key = null, $default = null)
     {
         $data = $this->validator->validated();
-        if ($this->input('password')) {
+        $this->dd($data);
+        if ($this->input('password') && isset($data['password']) && $data['password']) {
             $data['password'] = Hash::make($this->input('password'));
+        } else {
+            unset($data['password']);
         }
         return $data;
     }

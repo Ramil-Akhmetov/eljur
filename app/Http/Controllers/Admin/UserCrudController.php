@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\InviteCodeController;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Termwind\Components\Dd;
 
 /**
  * Class UserCrudController
@@ -16,7 +18,7 @@ class UserCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -45,6 +47,8 @@ class UserCrudController extends CrudController
 //            'name' => 'id',
 //            'label' => 'id',
 //        ]);
+
+//        dd(request()->user->id);
 
         CRUD::addColumn([
             'name' => 'surname',
@@ -76,15 +80,15 @@ class UserCrudController extends CrudController
             'label' => 'Пол',
             'type'  => 'enum',
         ]);
-//        CRUD::addColumn([
-//            'name'  => 'birthdate',
-//            'label' => 'День рождения',
-//            'type'  => 'date',
-//        ]);
-//        CRUD::addColumn([
-//            'name'  => 'role',
-//            'label' => 'Роль',
-//        ]);
+        CRUD::addColumn([
+            'name'  => 'birthdate',
+            'label' => 'День рождения',
+            'type'  => 'date',
+        ]);
+        CRUD::addColumn([
+            'name'  => 'role',
+            'label' => 'Роль',
+        ]);
         CRUD::addColumn([
             'name'  => 'id',
             'label' => 'Код приглашения',
@@ -127,6 +131,60 @@ class UserCrudController extends CrudController
         ]);
 
         CRUD::addField([
+            'name'  => 'sex',
+            'label' => 'Пол',
+            'type'  => 'enum',
+        ]);
+        CRUD::addField([
+            'name'  => 'birthdate',
+            'label' => 'День рождения',
+            'type'  => 'date',
+        ]);
+        CRUD::addField([
+            'name'  => 'role',
+            'label' => 'Роль',
+        ]);
+        CRUD::addField([
+            'name'  => 'password',
+            'label' => 'Пароль',
+            'type' => 'password',
+        ]);
+
+        /**
+         * Fields can be defined using the fluent syntax:
+         * - CRUD::field('price')->type('number');
+         */
+    }
+
+    /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(UserUpdateRequest::class);
+
+        CRUD::addField([
+            'name' => 'surname',
+            'label' => 'Фамилия',
+        ]);
+        CRUD::addField([
+            'name' => 'name',
+            'label' => 'Имя',
+        ]);
+        CRUD::addField([
+            'name' => 'patronymic',
+            'label' => 'Отчество',
+        ]);
+
+        CRUD::addField([
+            'name' => 'phone',
+            'label' => 'Телефон',
+        ]);
+
+        CRUD::addField([
             'name' => 'email',
             'label' => 'Email',
             'type' => 'email',
@@ -146,22 +204,11 @@ class UserCrudController extends CrudController
             'name'  => 'role',
             'label' => 'Роль',
         ]);
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
-    }
-
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
-    protected function setupUpdateOperation()
-    {
-        $this->setupCreateOperation();
+        CRUD::addField([
+            'name'  => 'password',
+            'label' => 'Пароль',
+            'type' => 'password',
+        ]);
     }
 
     protected function setupShowOperation()
@@ -171,6 +218,11 @@ class UserCrudController extends CrudController
 
     public function store()
     {
+        $password = $this->crud->getRequest()->request->get('password');
+        if (! $password) {
+            $this->crud->getRequest()->request->remove('password');
+        }
+
         $this->crud->hasAccessOrFail('create');
 
         // execute the FormRequest authorization and validation, if one is required
@@ -193,5 +245,17 @@ class UserCrudController extends CrudController
         $this->crud->setSaveAction();
 
         return $this->crud->performSaveAction($item->getKey());
+    }
+
+    public function update()
+    {
+        $password = $this->crud->getRequest()->request->get('password');
+        if (! $password) {
+            $this->crud->getRequest()->request->remove('password');
+        }
+
+        $response = $this->traitUpdate();
+        // do something after save
+        return $response;
     }
 }

@@ -11,19 +11,19 @@ created:
     - database/factories/LessonFactory.php
     - database/factories/AttendanceFactory.php
     - database/factories/InviteCodeFactory.php
-    - database/migrations/2024_05_19_204323_create_roles_table.php
-    - database/migrations/2024_05_19_204324_create_students_table.php
-    - database/migrations/2024_05_19_204325_create_teachers_table.php
-    - database/migrations/2024_05_19_204326_create_specialties_table.php
-    - database/migrations/2024_05_19_204327_create_groups_table.php
-    - database/migrations/2024_05_19_204328_create_classrooms_table.php
-    - database/migrations/2024_05_19_204329_create_lesson_types_table.php
-    - database/migrations/2024_05_19_204330_create_attendance_options_table.php
-    - database/migrations/2024_05_19_204331_create_subjects_table.php
-    - database/migrations/2024_05_19_204332_create_lessons_table.php
-    - database/migrations/2024_05_19_204333_create_attendances_table.php
-    - database/migrations/2024_05_19_204334_create_invite_codes_table.php
-    - database/migrations/2024_05_19_204335_create_subject_teacher_table.php
+    - database/migrations/2024_05_19_220737_create_roles_table.php
+    - database/migrations/2024_05_19_220738_create_students_table.php
+    - database/migrations/2024_05_19_220739_create_teachers_table.php
+    - database/migrations/2024_05_19_220740_create_specialties_table.php
+    - database/migrations/2024_05_19_220741_create_groups_table.php
+    - database/migrations/2024_05_19_220742_create_classrooms_table.php
+    - database/migrations/2024_05_19_220743_create_lesson_types_table.php
+    - database/migrations/2024_05_19_220744_create_attendance_options_table.php
+    - database/migrations/2024_05_19_220745_create_subjects_table.php
+    - database/migrations/2024_05_19_220746_create_lessons_table.php
+    - database/migrations/2024_05_19_220747_create_attendances_table.php
+    - database/migrations/2024_05_19_220748_create_invite_codes_table.php
+    - database/migrations/2024_05_19_220749_create_subject_teacher_table.php
     - app/Models/Role.php
     - app/Models/Student.php
     - app/Models/Teacher.php
