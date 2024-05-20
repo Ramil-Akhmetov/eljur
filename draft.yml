@@ -14,10 +14,14 @@ models:
   Role:
     name: string unique
 
+  StudentStatus:
+    name: string
+
   Student:
     code: string
     user_id: id foreign
     group_id: id foreign
+    student_status_id: id foreign
 
   Teacher:
     user_id: id foreign
@@ -30,13 +34,13 @@ models:
 
   Group:
     code: string unique
-    semester: number
+    semester: integer
     specialty_id: id foreign
     teacher_id: id foreign
 
   Classroom:
     name: string unique
-    number: number:unique
+    number: integer unique
 
   LessonType:
     short_name: string unique
@@ -48,6 +52,7 @@ models:
 
   Subject:
     name: string unique
+    hours: integer
     relationships:
       belongsToMany: Teacher
 
