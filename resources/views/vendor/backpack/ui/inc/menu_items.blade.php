@@ -7,3 +7,4 @@
 <x-backpack::menu-item title="Кабинеты" icon="la la-question" :link="backpack_url('classroom')" />
 
 <x-backpack::menu-item title="Specialties" icon="la la-question" :link="backpack_url('specialty')" />
+<x-backpack::menu-item title="Groups" icon="la la-question" :link="backpack_url('group')" />

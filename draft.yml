@@ -33,10 +33,11 @@ models:
     code: string unique
 
   Group:
-    code: string unique
-    semester: integer
+    code: string
+    semester: integer default:1
     specialty_id: id foreign
     teacher_id: id foreign
+    start_date: date
 
   Classroom:
     name: string unique
