@@ -13,3 +13,4 @@
 
 <x-backpack::menu-item title="Lesson types" icon="la la-question" :link="backpack_url('lesson-type')" />
 <x-backpack::menu-item title="Attendance options" icon="la la-question" :link="backpack_url('attendance-option')" />
+<x-backpack::menu-item title="Subjects" icon="la la-question" :link="backpack_url('subject')" />

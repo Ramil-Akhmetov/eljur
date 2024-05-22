@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GroupUpdateRequest extends FormRequest
+class SubjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,12 @@ class GroupUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $item_id = request()->route('id');
-
         return [
-            'code' => 'required|max:255',
+            'name' => 'required|max:255',
             'specialty' => 'required|exists:specialties,id',
-            'start_date' => 'required|date',
-            'semester' => 'required|numeric',
-            'teacher' => 'nullable|exists:teachers,id',
+            'hours' => 'required|numeric',
+            'teachers' => 'sometimes|array',
+            'teachers.*' => 'exists:teachers,id',
         ];
     }
 

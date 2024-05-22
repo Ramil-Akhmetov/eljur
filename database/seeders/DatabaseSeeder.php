@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\AttendanceOption;
 use App\Models\LessonType;
 use App\Models\Role;
+use App\Models\Specialty;
 use App\Models\StudentStatus;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -37,6 +38,7 @@ class DatabaseSeeder extends Seeder
         StudentStatus::factory()->create(['name' => 'Отчислен']);
         StudentStatus::factory()->create(['name' => 'Активен']);
         StudentStatus::factory()->create(['name' => 'Переведен']);
+        StudentStatus::factory()->create(['name' => 'Выпустился']);
 
         LessonType::factory()->create(['short_name' => 'КР', 'name' => 'Контрольная работа']);
         LessonType::factory()->create(['short_name' => 'СР', 'name' => 'Самостоятельная работа']);
@@ -45,5 +47,7 @@ class DatabaseSeeder extends Seeder
 
         AttendanceOption::factory()->create(['short_name' => 'Н', 'name' => 'Неуважительная причина']);
         AttendanceOption::factory()->create(['short_name' => 'У', 'name' => 'Уважительная причина']);
+
+        Specialty::factory(5)->create();
     }
 }

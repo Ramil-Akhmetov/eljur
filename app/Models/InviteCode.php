@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Specialty extends Model
+class InviteCode extends Model
 {
-    use CrudTrait;
     use HasFactory;
 
     /**
@@ -17,8 +16,8 @@ class Specialty extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
         'code',
+        'user_id',
     ];
 
     /**
@@ -28,5 +27,11 @@ class Specialty extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'user_id' => 'integer',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

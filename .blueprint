@@ -8,16 +8,16 @@ created:
     - database/factories/LessonFactory.php
     - database/factories/AttendanceFactory.php
     - database/factories/InviteCodeFactory.php
-    - database/migrations/2024_05_22_052743_create_student_statuses_table.php
-    - database/migrations/2024_05_22_052744_create_students_table.php
-    - database/migrations/2024_05_22_052745_create_teachers_table.php
-    - database/migrations/2024_05_22_052746_create_groups_table.php
-    - database/migrations/2024_05_22_052747_create_classrooms_table.php
-    - database/migrations/2024_05_22_052748_create_subjects_table.php
-    - database/migrations/2024_05_22_052749_create_lessons_table.php
-    - database/migrations/2024_05_22_052750_create_attendances_table.php
-    - database/migrations/2024_05_22_052751_create_invite_codes_table.php
-    - database/migrations/2024_05_22_052752_create_subject_teacher_table.php
+    - database/migrations/2024_05_22_054347_create_student_statuses_table.php
+    - database/migrations/2024_05_22_054348_create_students_table.php
+    - database/migrations/2024_05_22_054349_create_teachers_table.php
+    - database/migrations/2024_05_22_054350_create_groups_table.php
+    - database/migrations/2024_05_22_054351_create_classrooms_table.php
+    - database/migrations/2024_05_22_054352_create_subjects_table.php
+    - database/migrations/2024_05_22_054353_create_lessons_table.php
+    - database/migrations/2024_05_22_054354_create_attendances_table.php
+    - database/migrations/2024_05_22_054355_create_invite_codes_table.php
+    - database/migrations/2024_05_22_054356_create_subject_teacher_table.php
     - app/Models/StudentStatus.php
     - app/Models/Student.php
     - app/Models/Teacher.php
@@ -36,7 +36,7 @@ models:
     Classroom: { name: 'string unique', number: 'integer unique' }
     LessonType: { short_name: 'string unique', name: 'string unique' }
     AttendanceOption: { short_name: 'string unique', name: 'string unique' }
-    Subject: { name: 'string unique', hours: integer, relationships: { belongsToMany: Teacher } }
+    Subject: { specialty_id: 'id foreign', name: string, hours: integer, relationships: { belongsToMany: Teacher } }
     Lesson: { topic: string, timestamp: timestamp, teacher_id: 'id foreign', group_id: 'id foreign', subject_id: 'id foreign', classroom_id: 'id foreign', lesson_type_id: 'id foreign' }
     Attendance: { mark: number, attendance_option_id: 'id foreign nullable', student_id: 'id foreign', lesson_id: 'id foreign' }
     InviteCode: { code: string, user_id: 'id foreign' }

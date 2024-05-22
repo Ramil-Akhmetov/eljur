@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Specialty extends Model
+class Classroom extends Model
 {
-    use CrudTrait;
     use HasFactory;
 
     /**
@@ -18,7 +16,7 @@ class Specialty extends Model
      */
     protected $fillable = [
         'name',
-        'code',
+        'number',
     ];
 
     /**

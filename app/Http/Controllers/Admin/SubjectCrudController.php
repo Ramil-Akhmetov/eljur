@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\GroupRequest;
-use App\Http\Requests\GroupUpdateRequest;
+use App\Http\Requests\SubjectRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class GroupCrudController
+ * Class SubjectCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class GroupCrudController extends CrudController
+class SubjectCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -27,9 +26,9 @@ class GroupCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Group::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/group');
-        CRUD::setEntityNameStrings('группу', 'группы');
+        CRUD::setModel(\App\Models\Subject::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/subject');
+        CRUD::setEntityNameStrings('subject', 'subjects');
     }
 
     /**
@@ -41,8 +40,8 @@ class GroupCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::addColumn([
-            'name' => 'code',
-            'label' => 'Код',
+            'name' => 'name',
+            'label' => 'Название',
         ]);
 
         CRUD::addColumn([
@@ -51,20 +50,15 @@ class GroupCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name' => 'start_date',
-            'label' => 'Дата формирования',
-            'type' => 'date',
+            'name' => 'hours',
+            'label' => 'Количество часов',
         ]);
 
         CRUD::addColumn([
-            'name' => 'semester',
-            'label' => 'Семестр',
+            'name' => 'teachers',
+            'label' => 'Преподаватели',
+            'type' => 'multi_select',
         ]);
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
     }
 
     /**
@@ -76,14 +70,14 @@ class GroupCrudController extends CrudController
     protected function setupCreateOperation($is_update = false)
     {
         if ($is_update) {
-            CRUD::setValidation(GroupUpdateRequest::class);
+            CRUD::setValidation(LessonTypeUpdateRequest::class);
         } else {
-            CRUD::setValidation(GroupRequest::class);
+            CRUD::setValidation(SubjectRequest::class);
         }
 
         CRUD::addField([
-            'name' => 'code',
-            'label' => 'Код',
+            'name' => 'name',
+            'label' => 'Название',
         ]);
 
         CRUD::addField([
@@ -92,21 +86,13 @@ class GroupCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'start_date',
-            'label' => 'Дата формирования',
-            'type' => 'date',
+            'name' => 'hours',
+            'label' => 'Количество часов',
         ]);
 
         CRUD::addField([
-            'name' => 'semester',
-            'label' => 'Семестр',
-            'type' => 'number',
-            'default' => 1,
-        ]);
-
-        CRUD::addField([
-            'name' => 'teacher',
-            'label' => 'Классный руководитель',
+            'name' => 'teachers',
+            'label' => 'Преподаватели',
         ]);
     }
 

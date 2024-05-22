@@ -36,12 +36,12 @@ models:
     code: string
     semester: integer default:1
     specialty_id: id foreign
-    teacher_id: id foreign
+    teacher_id: id foreign nullable
     start_date: date
 
-  Classroom:
-    name: string unique
-    number: integer unique
+#  Classroom:
+#    name: string unique
+#    number: integer unique
 
 #  LessonType:
 #    short_name: string unique
@@ -73,6 +73,6 @@ models:
     student_id: id foreign
     lesson_id: id foreign
 
-  InviteCode:
-    code: string
-    user_id: id foreign
+#  InviteCode:
+#    code: string
+#    user_id: id foreign

@@ -27,7 +27,9 @@ class GroupRequest extends FormRequest
         return [
             'code' => 'required|max:255',
             'specialty' => 'required|exists:specialties,id',
-            'semester' => 'nullable|numeric',
+            'start_date' => 'required|date',
+            'semester' => 'required|numeric',
+            'teacher' => 'nullable|exists:teachers,id',
         ];
     }
 

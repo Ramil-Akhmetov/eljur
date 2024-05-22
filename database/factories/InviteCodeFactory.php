@@ -4,16 +4,17 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use App\Models\Specialty;
+use App\Models\InviteCode;
+use App\Models\User;
 
-class SpecialtyFactory extends Factory
+class InviteCodeFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Specialty::class;
+    protected $model = InviteCode::class;
 
     /**
      * Define the model's default state.
@@ -21,8 +22,8 @@ class SpecialtyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
             'code' => $this->faker->word(),
+            'user_id' => User::factory(),
         ];
     }
 }
