@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Operations\CloneTestOperation;
+use App\Http\Controllers\Admin\Operations\CreateStudentOperation;
+use App\Http\Controllers\Admin\Operations\CreateTeacherOperation;
 use App\Http\Controllers\InviteCodeController;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -21,6 +24,9 @@ class UserCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+//    use CreateStudentOperation;
+//    use CreateTeacherOperation;
+use CloneTestOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.

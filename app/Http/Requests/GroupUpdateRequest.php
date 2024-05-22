@@ -28,7 +28,7 @@ class GroupUpdateRequest extends FormRequest
 
         return [
             'code' => 'required|max:255',
-            'specialty' => 'required|exists:groups,id',
+            'specialty' => 'required|exists:specialties,id',
             'semester' => 'sometimes|numeric',
         ];
     }
