@@ -10,3 +10,5 @@
 <x-backpack::menu-item title="Groups" icon="la la-group" :link="backpack_url('group')" />
 <x-backpack::menu-item title="Students" icon="la la-graduation-cap" :link="backpack_url('student')" />
 <x-backpack::menu-item title="Teachers" icon="la la-chalkboard-teacher" :link="backpack_url('teacher')" />
+
+<x-backpack::menu-item title="Lesson types" icon="la la-question" :link="backpack_url('lesson-type')" />

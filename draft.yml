@@ -28,9 +28,9 @@ models:
     relationships:
       belongsToMany: Subject
 
-  Specialty:
-    name: string unique
-    code: string unique
+#  Specialty:
+#    name: string unique
+#    code: string unique
 
   Group:
     code: string
@@ -43,9 +43,9 @@ models:
     name: string unique
     number: integer unique
 
-  LessonType:
-    short_name: string unique
-    name: string unique
+#  LessonType:
+#    short_name: string unique
+#    name: string unique
 
   AttendanceOption:
     short_name: string unique

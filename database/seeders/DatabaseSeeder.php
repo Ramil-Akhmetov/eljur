@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\LessonType;
 use App\Models\Role;
 use App\Models\StudentStatus;
 use App\Models\User;
@@ -35,5 +36,10 @@ class DatabaseSeeder extends Seeder
         StudentStatus::factory()->create(['name' => 'Отчислен']);
         StudentStatus::factory()->create(['name' => 'Активен']);
         StudentStatus::factory()->create(['name' => 'Переведен']);
+
+        LessonType::factory()->create(['short_name' => 'КР', 'name' => 'Контрольная работа']);
+        LessonType::factory()->create(['short_name' => 'СР', 'name' => 'Самостоятельная работа']);
+        LessonType::factory()->create(['short_name' => 'ПР', 'name' => 'Практическая работа']);
+        LessonType::factory()->create(['short_name' => 'ЛР', 'name' => 'Лабораторная работа']);
     }
 }
