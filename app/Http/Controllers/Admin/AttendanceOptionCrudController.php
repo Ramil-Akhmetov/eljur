@@ -29,7 +29,7 @@ class AttendanceOptionCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\AttendanceOption::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/attendance-option');
-        CRUD::setEntityNameStrings('attendance option', 'attendance options');
+        CRUD::setEntityNameStrings('тип посещаемости', 'типы посещаемости');
     }
 
     /**
