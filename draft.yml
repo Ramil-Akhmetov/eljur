@@ -11,8 +11,8 @@ models:
 #    birthdate: date
 #    role_id: id foreign
 
-  Role:
-    name: string unique
+#  Role:
+#    name: string unique
 
   StudentStatus:
     name: string

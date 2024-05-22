@@ -1,9 +1,7 @@
 created:
-    - database/factories/RoleFactory.php
     - database/factories/StudentStatusFactory.php
     - database/factories/StudentFactory.php
     - database/factories/TeacherFactory.php
-    - database/factories/SpecialtyFactory.php
     - database/factories/GroupFactory.php
     - database/factories/ClassroomFactory.php
     - database/factories/LessonTypeFactory.php
@@ -12,25 +10,21 @@ created:
     - database/factories/LessonFactory.php
     - database/factories/AttendanceFactory.php
     - database/factories/InviteCodeFactory.php
-    - database/migrations/2024_05_22_040748_create_roles_table.php
-    - database/migrations/2024_05_22_040749_create_student_statuses_table.php
-    - database/migrations/2024_05_22_040750_create_students_table.php
-    - database/migrations/2024_05_22_040751_create_teachers_table.php
-    - database/migrations/2024_05_22_040752_create_specialties_table.php
-    - database/migrations/2024_05_22_040753_create_groups_table.php
-    - database/migrations/2024_05_22_040754_create_classrooms_table.php
-    - database/migrations/2024_05_22_040755_create_lesson_types_table.php
-    - database/migrations/2024_05_22_040756_create_attendance_options_table.php
-    - database/migrations/2024_05_22_040757_create_subjects_table.php
-    - database/migrations/2024_05_22_040758_create_lessons_table.php
-    - database/migrations/2024_05_22_040759_create_attendances_table.php
-    - database/migrations/2024_05_22_040800_create_invite_codes_table.php
-    - database/migrations/2024_05_22_040801_create_subject_teacher_table.php
-    - app/Models/Role.php
+    - database/migrations/2024_05_22_045014_create_student_statuses_table.php
+    - database/migrations/2024_05_22_045015_create_students_table.php
+    - database/migrations/2024_05_22_045016_create_teachers_table.php
+    - database/migrations/2024_05_22_045017_create_groups_table.php
+    - database/migrations/2024_05_22_045018_create_classrooms_table.php
+    - database/migrations/2024_05_22_045019_create_lesson_types_table.php
+    - database/migrations/2024_05_22_045020_create_attendance_options_table.php
+    - database/migrations/2024_05_22_045021_create_subjects_table.php
+    - database/migrations/2024_05_22_045022_create_lessons_table.php
+    - database/migrations/2024_05_22_045023_create_attendances_table.php
+    - database/migrations/2024_05_22_045024_create_invite_codes_table.php
+    - database/migrations/2024_05_22_045025_create_subject_teacher_table.php
     - app/Models/StudentStatus.php
     - app/Models/Student.php
     - app/Models/Teacher.php
-    - app/Models/Specialty.php
     - app/Models/Group.php
     - app/Models/Classroom.php
     - app/Models/LessonType.php
