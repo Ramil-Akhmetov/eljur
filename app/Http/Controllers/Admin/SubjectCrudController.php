@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\SubjectRequest;
+use App\Http\Requests\SubjectUpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -57,7 +58,7 @@ class SubjectCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'teachers',
             'label' => 'Преподаватели',
-            'type' => 'multi_select',
+            'type' => 'select_multiple',
         ]);
     }
 
@@ -70,7 +71,7 @@ class SubjectCrudController extends CrudController
     protected function setupCreateOperation($is_update = false)
     {
         if ($is_update) {
-            CRUD::setValidation(LessonTypeUpdateRequest::class);
+            CRUD::setValidation(SubjectUpdateRequest::class);
         } else {
             CRUD::setValidation(SubjectRequest::class);
         }
@@ -90,6 +91,7 @@ class SubjectCrudController extends CrudController
             'label' => 'Количество часов',
         ]);
 
+        // TODO debug this
         CRUD::addField([
             'name' => 'teachers',
             'label' => 'Преподаватели',

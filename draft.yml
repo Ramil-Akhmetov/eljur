@@ -38,6 +38,7 @@ models:
     specialty_id: id foreign
     teacher_id: id foreign nullable
     start_date: date
+#    TODO maybe add is_free
 
 #  Classroom:
 #    name: string unique

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SubjectRequest extends FormRequest
+class SubjectUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +24,7 @@ class SubjectRequest extends FormRequest
      */
     public function rules()
     {
+        $item_id = request()->route('id');
         return [
             'name' => 'required|max:255',
             'specialty' => 'required|exists:specialties,id',
