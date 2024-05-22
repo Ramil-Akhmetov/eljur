@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LessonTypeRequest extends FormRequest
+class AttendanceOptionUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class LessonTypeRequest extends FormRequest
      */
     public function rules()
     {
+        $item_id = request()->route('id');
         return [
-            'name' => 'required|max:255|unique:lesson_types',
-            'short_name' => 'required|max:255|unique:lesson_types',
+            'name' => 'sometimes|max:255|unique:attendance_options,name,'. $item_id,
+            'short_name' => 'sometimes|max:255|unique:attendance_options,short_name,'. $item_id,
         ];
     }
 

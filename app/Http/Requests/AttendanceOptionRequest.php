@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LessonTypeRequest extends FormRequest
+class AttendanceOptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,8 @@ class LessonTypeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255|unique:lesson_types',
-            'short_name' => 'required|max:255|unique:lesson_types',
+            'name' => 'required|max:255|unique:attendance_options',
+            'short_name' => 'required|max:255|unique:attendance_options',
         ];
     }
 

@@ -47,9 +47,9 @@ models:
 #    short_name: string unique
 #    name: string unique
 
-  AttendanceOption:
-    short_name: string unique
-    name: string unique
+#  AttendanceOption:
+#    short_name: string unique
+#    name: string unique
 
   Subject:
     name: string unique
@@ -68,7 +68,7 @@ models:
 
   Attendance:
     mark: number
-    attendance_option_id: id foreign
+    attendance_option_id: id foreign nullable
     student_id: id foreign
     lesson_id: id foreign
 

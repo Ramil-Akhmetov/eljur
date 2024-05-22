@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AttendanceOption;
 use App\Models\LessonType;
 use App\Models\Role;
 use App\Models\StudentStatus;
@@ -41,5 +42,8 @@ class DatabaseSeeder extends Seeder
         LessonType::factory()->create(['short_name' => 'СР', 'name' => 'Самостоятельная работа']);
         LessonType::factory()->create(['short_name' => 'ПР', 'name' => 'Практическая работа']);
         LessonType::factory()->create(['short_name' => 'ЛР', 'name' => 'Лабораторная работа']);
+
+        AttendanceOption::factory()->create(['short_name' => 'Н', 'name' => 'Неуважительная причина']);
+        AttendanceOption::factory()->create(['short_name' => 'У', 'name' => 'Уважительная причина']);
     }
 }

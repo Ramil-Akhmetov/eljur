@@ -12,3 +12,4 @@
 <x-backpack::menu-item title="Teachers" icon="la la-chalkboard-teacher" :link="backpack_url('teacher')" />
 
 <x-backpack::menu-item title="Lesson types" icon="la la-question" :link="backpack_url('lesson-type')" />
+<x-backpack::menu-item title="Attendance options" icon="la la-question" :link="backpack_url('attendance-option')" />
