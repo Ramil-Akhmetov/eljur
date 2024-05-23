@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Operations\OldTransferStudentOperation;
+use App\Http\Controllers\Admin\Operations\TransferStudentOperation;
 use App\Http\Requests\StudentRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -18,6 +20,9 @@ class StudentCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+
+//    use OldTransferStudentOperation;
+    use TransferStudentOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -73,21 +78,24 @@ class StudentCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name'  => 'user.sex',
+            'name' => 'user.sex',
             'label' => 'Пол',
-            'type'  => 'enum',
+            'type' => 'enum',
         ]);
         CRUD::addColumn([
-            'name'  => 'user.birthdate',
+            'name' => 'user.birthdate',
             'label' => 'День рождения',
-            'type'  => 'date',
+            'type' => 'date',
         ]);
         CRUD::addColumn([
             'name' => 'studentStatus',
             'label' => 'Статус',
         ]);
-    }
 
+        // Add this line to add custom query based on filter
+        if (request()->has('group')) {
+            $this->crud->addClause('where', 'group_id', request()->input('group'));
+        }    }
     /**
      * Define what happens when the Create operation is loaded.
      *

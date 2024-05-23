@@ -1,20 +1,17 @@
 created:
-    - database/factories/StudentStatusFactory.php
     - database/factories/StudentFactory.php
     - database/factories/TeacherFactory.php
     - database/factories/GroupFactory.php
     - database/factories/SubjectFactory.php
     - database/factories/LessonFactory.php
     - database/factories/AttendanceFactory.php
-    - database/migrations/2024_05_22_064212_create_student_statuses_table.php
-    - database/migrations/2024_05_22_064213_create_students_table.php
-    - database/migrations/2024_05_22_064214_create_teachers_table.php
-    - database/migrations/2024_05_22_064215_create_groups_table.php
-    - database/migrations/2024_05_22_064216_create_subjects_table.php
-    - database/migrations/2024_05_22_064217_create_lessons_table.php
-    - database/migrations/2024_05_22_064218_create_attendances_table.php
-    - database/migrations/2024_05_22_064219_create_subject_teacher_table.php
-    - app/Models/StudentStatus.php
+    - database/migrations/2024_05_23_032351_create_students_table.php
+    - database/migrations/2024_05_23_032352_create_teachers_table.php
+    - database/migrations/2024_05_23_032353_create_groups_table.php
+    - database/migrations/2024_05_23_032354_create_subjects_table.php
+    - database/migrations/2024_05_23_032355_create_lessons_table.php
+    - database/migrations/2024_05_23_032356_create_attendances_table.php
+    - database/migrations/2024_05_23_032357_create_subject_teacher_table.php
     - app/Models/Student.php
     - app/Models/Teacher.php
     - app/Models/Group.php

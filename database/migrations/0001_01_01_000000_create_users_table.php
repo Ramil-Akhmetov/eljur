@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->enum('sex', ['Мужчина', 'Женщина']);
-            $table->foreignId('role_id')->constrained()->nullable();
+            $table->foreignId('role_id')->nullable()->constrained();
             $table->rememberToken();
             $table->timestamps();
         });

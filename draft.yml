@@ -38,7 +38,10 @@ models:
     specialty_id: id foreign
     teacher_id: id foreign nullable
     start_date: date
-#    TODO maybe add is_free
+#    TODO maybe add is_free, group status
+
+  GroupStatus:
+    name: string
 
 #  Classroom:
 #    name: string unique

@@ -101,12 +101,13 @@ trait CreateStudentOperation
             ])->validate();
 
             if (!$entry->student) {
-                $entry->role_id = Role::where('name', 'Студент')->first();
+                $entry->role_id = Role::where('name', 'Студент')->first()->id;
                 $entry->student()->create([
                     'code' => $valid['code'],
                     'group_id' => $valid['group'],
                     'student_status_id' => $valid['student_status'],
                 ]);
+                $entry->save();
             } else {
                 \Alert::error('Пользователь уже является студентом')->flash();
             }

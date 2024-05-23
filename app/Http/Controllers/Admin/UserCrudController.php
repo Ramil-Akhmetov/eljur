@@ -126,10 +126,13 @@ class UserCrudController extends CrudController
             'name' => 'patronymic',
             'label' => 'Отчество',
         ]);
-
         CRUD::addField([
             'name' => 'phone',
             'label' => 'Телефон',
+        ]);
+        CRUD::addField([
+            'name' => 'role',
+            'label' => 'Роль',
         ]);
 
         CRUD::addField([

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Operations;
 use App\Models\Role;
 use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\Operations\Concerns\HasForm;
+use Illuminate\Support\Facades\Validator;
 
 trait CreateTeacherOperation
 {
@@ -85,9 +86,15 @@ trait CreateTeacherOperation
         $this->crud->hasAccessOrFail('createTeacher');
 
         return $this->formAction(id: $id, formLogic: function ($inputs, $entry) {
+            // TODO debug
+            $valid = Validator::make($inputs, [
+                'teacherSubjects.*' => 'required|exists:subjects,id',
+            ])->validate();
+
             if(! $entry->teacher) {
-                $entry->role_id = Role::where('name', 'Преподаватель')->first();
-                $entry->teacher()->create()->subjects()->create($inputs->teacherSubjects);
+                $entry->role_id = Role::where('name', 'Преподаватель')->first()->id;
+                $entry->teacher()->create()->subjects()->attach($valid['teacherSubjects']);
+                $entry->save();
             } else {
                 \Alert::error('Пользователь уже является преподавателем')->flash();
             }
