@@ -39,12 +39,53 @@ class StudentCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        CRUD::addColumn([
+            'name' => 'code',
+            'label' => 'Код',
+        ]);
+        CRUD::addColumn([
+            'name' => 'group',
+            'label' => 'Группа',
+        ]);
+        CRUD::addColumn([
+            'name' => 'user.surname',
+            'label' => 'Фамилия',
+        ]);
+        CRUD::addColumn([
+            'name' => 'user.name',
+            'label' => 'Имя',
+        ]);
+        CRUD::addColumn([
+            'name' => 'user.patronymic',
+            'label' => 'Отчество',
+        ]);
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        CRUD::addColumn([
+            'name' => 'user.phone',
+            'label' => 'Телефон',
+            'type' => 'phone',
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'user.email',
+            'label' => 'email',
+            'type' => 'Email',
+        ]);
+
+        CRUD::addColumn([
+            'name'  => 'user.sex',
+            'label' => 'Пол',
+            'type'  => 'enum',
+        ]);
+        CRUD::addColumn([
+            'name'  => 'user.birthdate',
+            'label' => 'День рождения',
+            'type'  => 'date',
+        ]);
+        CRUD::addColumn([
+            'name' => 'studentStatus',
+            'label' => 'Статус',
+        ]);
     }
 
     /**
@@ -56,12 +97,28 @@ class StudentCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(StudentRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+//        CRUD::setFromDb(); // set fields from db columns.
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        $this->crud->addField([
+            'name' => 'code',
+            'label' => 'Код',
+        ]);
+        $this->crud->addField([
+            'name' => 'group',
+            'label' => 'Группа',
+        ]);
+        $this->crud->addField([
+            'name' => 'student_status',
+            'label' => 'Статус',
+            'type' => 'select',
+            'default' => 1,
+            'model' => 'App\Models\StudentStatus',
+            'attribute' => 'name',
+
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }), //  you can use this to filter the results show in the select            ]);
+        ]);
     }
 
     /**

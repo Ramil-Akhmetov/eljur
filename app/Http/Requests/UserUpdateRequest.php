@@ -35,7 +35,6 @@ class UserUpdateRequest extends FormRequest
             'email' => 'sometimes|string|email|unique:users,email,' . $item_id,
             'sex' => 'sometimes',
             'birthdate' => 'sometimes|date',
-            'role' => 'sometimes|exists:roles,id',
             'password' => 'sometimes',
         ];
     }

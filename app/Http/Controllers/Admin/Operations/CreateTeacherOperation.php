@@ -2,51 +2,98 @@
 
 namespace App\Http\Controllers\Admin\Operations;
 
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Support\Facades\Route;
+use App\Models\Role;
+use App\Models\User;
+use Backpack\CRUD\app\Http\Controllers\Operations\Concerns\HasForm;
 
 trait CreateTeacherOperation
 {
+    use HasForm;
+
     /**
      * Define which routes are needed for this operation.
      *
-     * @param string $segment    Name of the current entity (singular). Used as first URL segment.
-     * @param string $routeName  Prefix of the route name.
+     * @param string $segment Name of the current entity (singular). Used as first URL segment.
+     * @param string $routeName Prefix of the route name.
      * @param string $controller Name of the current CrudController.
      */
-    protected function setupCreateTeacherRoutes($segment, $routeName, $controller)
+    protected function setupCreateTeacherRoutes(string $segment, string $routeName, string $controller): void
     {
-        Route::post($segment.'/create-teacher', [
-            'as'        => $routeName.'.createTeacher',
-            'uses'      => $controller.'@createTeacher',
-            'operation' => 'createTeacher',
-        ]);
+        $this->formRoutes(
+            operationName: 'createTeacher',
+            routesHaveIdSegment: true,
+            segment: $segment,
+            routeName: $routeName,
+            controller: $controller,
+        );
     }
 
     /**
      * Add the default settings, buttons, etc that this operation needs.
      */
-    protected function setupCreateTeacherDefaults()
+    protected function setupCreateTeacherDefaults(): void
     {
-        CRUD::allowAccess('createTeacher');
+        $this->formDefaults(
+            operationName: 'createTeacher',
+            buttonStack: 'line', // alternatives: top, bottom
+            buttonMeta: [
+                'icon' => 'la la-chalkboard-teacher',
+                'label' => 'Сделать преподавателем',
+            ],
+        );
 
-        $this->crud->operation(['list', 'show'], function () {
-            $this->crud->addButtonFromView('line', 'create-teacher', 'create-teacher', 'end');
+        $this->crud->operation('createTeacher', function () {
+            $this->crud->addField([
+                'name' => 'teacherSubjects',
+                'label' => 'Предметы',
+                'type' => 'select_multiple',
+                // optional
+                'entity'    => 'teacherSubjects', // the method that defines the relationship in your Model
+                'model'     => "App\Models\Subject", // foreign key model
+                'attribute' => 'name',
+                'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+
+                // also optional
+                'options'   => (function ($query) {
+                    return $query->orderBy('name', 'ASC')->get();
+                }), // force the related options to be a custom query, instead of all(); y
+            ]);
         });
-
     }
 
-    public function createTeacher()
+    public function getCreateTeacherForm(int $id)
     {
-        CRUD::hasAccessOrFail('createTeacher');
-        $this->crud->setOperation('createTeacher');
+        $this->crud->hasAccessOrFail('createTeacher');
 
-        return response()->json([
-            'message' => 'hello',
-        ]);
+        $user = User::find($id);
 
-//        $clonedEntry = $this->crud->model->findOrFail($id)->replicate();
+        if($user->teacher) {
+            return redirect(config('backpack.base.route_prefix') . '/teacher/' . $user->teacher->id . '/edit');
+        }
 
-//        return (string) $clonedEntry->push();
+        return $this->formView($id);
+    }
+
+    /**
+     * Method to handle the POST request and perform the operation
+     *
+     * @param int $id
+     * @return array|\Illuminate\Http\RedirectResponse
+     */
+    public function postCreateTeacherForm(int $id)
+    {
+        $this->crud->hasAccessOrFail('createTeacher');
+
+        return $this->formAction(id: $id, formLogic: function ($inputs, $entry) {
+            if(! $entry->teacher) {
+                $entry->role_id = Role::where('name', 'Преподаватель')->first();
+                $entry->teacher()->create()->subjects()->create($inputs->teacherSubjects);
+            } else {
+                \Alert::error('Пользователь уже является преподавателем')->flash();
+            }
+
+            // show a success message
+            \Alert::success('Запись была успешно добавлена.')->flash();
+        });
     }
 }

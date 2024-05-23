@@ -35,8 +35,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@email.com',
         ]);
 
-        StudentStatus::factory()->create(['name' => 'Отчислен']);
         StudentStatus::factory()->create(['name' => 'Активен']);
+        StudentStatus::factory()->create(['name' => 'Отчислен']);
         StudentStatus::factory()->create(['name' => 'Переведен']);
         StudentStatus::factory()->create(['name' => 'Выпустился']);
 

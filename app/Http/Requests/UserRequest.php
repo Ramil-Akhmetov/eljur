@@ -33,7 +33,6 @@ class UserRequest extends FormRequest
             'email' => 'sometimes|unique:users',
             'sex' => 'required',
             'birthdate' => 'required|date',
-            'role' => 'required|exists:roles,id',
             'password' => 'sometimes',
         ];
     }

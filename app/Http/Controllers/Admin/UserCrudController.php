@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\Operations\CloneTestOperation;
-use App\Http\Controllers\Admin\Operations\CreateStudentOperation;
 use App\Http\Controllers\Admin\Operations\CreateTeacherOperation;
+use App\Http\Controllers\Admin\Operations\CreateStudentOperation;
+use App\Http\Controllers\Admin\Operations\OCreateTeacherOperation;
+use App\Http\Controllers\Admin\Operations\OldCreateTeacherOperation;
 use App\Http\Controllers\InviteCodeController;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -24,9 +26,8 @@ class UserCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-//    use CreateStudentOperation;
-//    use CreateTeacherOperation;
-use CloneTestOperation;
+    use CreateTeacherOperation;
+    use CreateStudentOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -100,11 +101,6 @@ use CloneTestOperation;
             'label' => 'Код приглашения',
             'type' => 'invite_code_column'
         ]);
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
     }
 
     /**
@@ -147,19 +143,10 @@ use CloneTestOperation;
             'type'  => 'date',
         ]);
         CRUD::addField([
-            'name'  => 'role',
-            'label' => 'Роль',
-        ]);
-        CRUD::addField([
             'name'  => 'password',
             'label' => 'Пароль',
             'type' => 'password',
         ]);
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
     }
 
     /**
@@ -205,10 +192,6 @@ use CloneTestOperation;
             'name'  => 'birthdate',
             'label' => 'День рождения',
             'type'  => 'date',
-        ]);
-        CRUD::addField([
-            'name'  => 'role',
-            'label' => 'Роль',
         ]);
         CRUD::addField([
             'name'  => 'password',

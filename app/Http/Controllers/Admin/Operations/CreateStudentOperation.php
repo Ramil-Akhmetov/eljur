@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Operations;
 
+use App\Models\Role;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\Operations\Concerns\HasForm;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 
 trait CreateStudentOperation
 {
@@ -13,33 +14,19 @@ trait CreateStudentOperation
     /**
      * Define which routes are needed for this operation.
      *
-     * @param string $segment    Name of the current entity (singular). Used as first URL segment.
-     * @param string $routeName  Prefix of the route name.
+     * @param string $segment Name of the current entity (singular). Used as first URL segment.
+     * @param string $routeName Prefix of the route name.
      * @param string $controller Name of the current CrudController.
      */
-//    protected function setupCreateTeacherRoutes(string $segment, string $routeName, string $controller): void
-//    {
-//        $this->formRoutes(
-//            operationName: 'comment',
-//            routesHaveIdSegment: true,
-//            segment: $segment,
-//            routeName: $routeName,
-//            controller: $controller
-//        );
-//    }
-
-    protected function setupCreateStudentRoutes($segment, $routeName, $controller)
+    protected function setupCreateStudentRoutes(string $segment, string $routeName, string $controller): void
     {
-        Route::get($segment.'/{id}/create-student', [
-            'as'        => $routeName.'.getCreateStudent',
-            'uses'      => $controller.'@getCreateStudentForm',
-            'operation' => 'createStudent',
-        ]);
-        Route::post($segment.'/{id}/create-student', [
-            'as'        => $routeName.'.postModerate',
-            'uses'      => $controller.'@postCreateStudentForm',
-            'operation' => 'createStudent',
-        ]);
+        $this->formRoutes(
+            operationName: 'createStudent',
+            routesHaveIdSegment: true,
+            segment: $segment,
+            routeName: $routeName,
+            controller: $controller,
+        );
     }
 
     /**
@@ -50,54 +37,81 @@ trait CreateStudentOperation
         $this->formDefaults(
             operationName: 'createStudent',
             buttonStack: 'line', // alternatives: top, bottom
-         buttonMeta: [
-             'icon' => 'la la-graduation-cap',
-             'label' => 'Создать студента',
-             'wrapper' => [
-                  'target' => '_blank',
-             ],
-         ],
+            buttonMeta: [
+                'icon' => 'la la-graduation-cap',
+                'label' => 'Сделать студентом',
+            ],
         );
+
+        $this->crud->operation('createStudent', function () {
+            $this->crud->addField([
+                'name' => 'code',
+                'label' => 'Код',
+                'entity' => 'student.code',
+            ]);
+            $this->crud->addField([
+                'name' => 'group',
+                'label' => 'Группа',
+                'entity' => 'student.group',
+            ]);
+            $this->crud->addField([
+                'name' => 'student_status',
+                'label' => 'Статус',
+                'type' => 'select',
+                'default' => 1,
+                'entity' => 'student.studentStatus',
+                'model' => 'App\Models\StudentStatus',
+                'attribute' => 'name',
+
+                'options' => (function ($query) {
+                    return $query->orderBy('name', 'ASC')->get();
+                }), //  you can use this to filter the results show in the select            ]);
+            ]);
+        });
     }
 
-    /**
-     * Method to handle the GET request and display the View with a Backpack form
-     *
-     * @param  int  $id
-     * @return \Illuminate\Contracts\View\View
-     */
     public function getCreateStudentForm(int $id)
     {
-        $this->crud->hasAccessOrFail('update');
-        $this->crud->setOperation('createStudent');
+        $this->crud->hasAccessOrFail('createStudent');
 
-        // get the info for that entry
-        $this->data['entry'] = $this->crud->getEntry($id);
-        $this->data['crud'] = $this->crud;
-        $this->data['title'] = 'Создание студента '.$this->crud->entity_name;
+        $user = User::find($id);
 
-        return view('vendor.backpack.crud.create-student', $this->data);    }
+        if ($user->student) {
+            return redirect(config('backpack.base.route_prefix') . '/student/' . $user->student->id . '/edit');
+        }
+
+        return $this->formView($id);
+    }
 
     /**
      * Method to handle the POST request and perform the operation
      *
-     * @param  int  $id
+     * @param int $id
      * @return array|\Illuminate\Http\RedirectResponse
      */
     public function postCreateStudentForm(int $id)
     {
-        $this->crud->hasAccessOrFail('update');
+        $this->crud->hasAccessOrFail('createStudent');
 
-        // TODO: do whatever logic you need here
-        // ...
-        // You can use
-        // - $this->crud
-        // - $this->crud->getEntry($id)
-        // - $request
-        // ...
+        return $this->formAction(id: $id, formLogic: function ($inputs, $entry) {
+            $valid = Validator::make($inputs, [
+                'code' => 'required|unique:students',
+                'group' => 'required|exists:groups,id',
+                'student_status' => 'required|exists:student_statuses,id',
+            ])->validate();
 
-        // show a success message
-        \Alert::success('Студент успешно создан.')->flash();
+            if (!$entry->student) {
+                $entry->role_id = Role::where('name', 'Студент')->first();
+                $entry->student()->create([
+                    'code' => $valid['code'],
+                    'group_id' => $valid['group'],
+                    'student_status_id' => $valid['student_status'],
+                ]);
+            } else {
+                \Alert::error('Пользователь уже является студентом')->flash();
+            }
 
-        return \Redirect::to($this->crud->route);    }
+            \Alert::success('Запись была успешно добавлена.')->flash();
+        });
+    }
 }

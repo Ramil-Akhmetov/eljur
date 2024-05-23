@@ -69,4 +69,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(Teacher::class);
     }
+
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class);
+    }
+    public function teacherSubjects()
+    {
+        return $this->hasManyThrough(Subject::class, Teacher::class, 'user_id', 'id', 'id', 'subject_id');
+    }
 }

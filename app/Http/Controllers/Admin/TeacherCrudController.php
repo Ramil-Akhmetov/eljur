@@ -39,12 +39,49 @@ class TeacherCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+//        CRUD::setFromDb(); // set columns from db columns.
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        CRUD::addColumn([
+            'name' => 'user.surname',
+            'label' => 'Фамилия',
+        ]);
+        CRUD::addColumn([
+            'name' => 'user.name',
+            'label' => 'Имя',
+        ]);
+        CRUD::addColumn([
+            'name' => 'user.patronymic',
+            'label' => 'Отчество',
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'user.phone',
+            'label' => 'Телефон',
+            'type' => 'phone',
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'user.email',
+            'label' => 'email',
+            'type' => 'Email',
+        ]);
+
+        CRUD::addColumn([
+            'name'  => 'user.sex',
+            'label' => 'Пол',
+            'type'  => 'enum',
+        ]);
+        CRUD::addColumn([
+            'name'  => 'user.birthdate',
+            'label' => 'День рождения',
+            'type'  => 'date',
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'subjects',
+            'label' => 'Предметы',
+            'type' => 'select_multiple',
+        ]);
     }
 
     /**

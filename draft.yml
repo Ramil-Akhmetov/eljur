@@ -9,13 +9,13 @@ models:
 #    phone: string unique
 #    sex: boolean
 #    birthdate: date
-#    role_id: id foreign
+#    role_id: id foreign nullable
 
 #  Role:
 #    name: string unique
 
-  StudentStatus:
-    name: string
+#  StudentStatus:
+#    name: string
 
   Student:
     code: string
