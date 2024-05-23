@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\AttendanceOption;
+use App\Models\Group;
+use App\Models\GroupStatus;
 use App\Models\LessonType;
 use App\Models\Role;
 use App\Models\Specialty;
@@ -21,10 +23,10 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         Role::factory()->create([
-            'name' => 'Студент',
+            'name' => 'Администратор',
         ]);
         Role::factory()->create([
-            'name' => 'Администратор',
+            'name' => 'Студент',
         ]);
         Role::factory()->create([
             'name' => 'Преподаватель',
@@ -33,6 +35,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@email.com',
+            'role_id' => 1,
         ]);
 
         StudentStatus::factory()->create(['name' => 'Активен']);
@@ -49,5 +52,9 @@ class DatabaseSeeder extends Seeder
         AttendanceOption::factory()->create(['short_name' => 'У', 'name' => 'Уважительная причина']);
 
         Specialty::factory(5)->create();
+
+        GroupStatus::factory()->create(['name' => 'Не активна']);
+        GroupStatus::factory()->create(['name' => 'Активен']);
+        GroupStatus::factory()->create(['name' => 'Выпустилась']);
     }
 }

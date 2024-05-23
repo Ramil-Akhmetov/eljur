@@ -31,6 +31,7 @@ class GroupUpdateRequest extends FormRequest
             'specialty' => 'required|exists:specialties,id',
             'start_date' => 'required|date',
             'semester' => 'required|numeric',
+            'groupStatus' => 'required|exists:group_statuses,id',
             'teacher' => 'nullable|exists:teachers,id',
         ];
     }

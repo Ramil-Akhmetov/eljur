@@ -49,14 +49,6 @@ class UserCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-//        CRUD::setFromDb(); // set columns from db columns.
-//        CRUD::addColumn([
-//            'name' => 'id',
-//            'label' => 'id',
-//        ]);
-
-//        dd(request()->user->id);
-
         CRUD::addColumn([
             'name' => 'surname',
             'label' => 'Фамилия',
@@ -95,11 +87,6 @@ class UserCrudController extends CrudController
         CRUD::addColumn([
             'name'  => 'role',
             'label' => 'Роль',
-        ]);
-        CRUD::addColumn([
-            'name'  => 'id',
-            'label' => 'Код приглашения',
-            'type' => 'invite_code_column'
         ]);
     }
 

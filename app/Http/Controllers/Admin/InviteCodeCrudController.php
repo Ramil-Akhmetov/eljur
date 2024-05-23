@@ -36,7 +36,6 @@ class InviteCodeCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
         CRUD::addColumn([
             'name' => 'code',
             'label' => 'Код',

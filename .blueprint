@@ -2,19 +2,22 @@ created:
     - database/factories/StudentFactory.php
     - database/factories/TeacherFactory.php
     - database/factories/GroupFactory.php
+    - database/factories/GroupStatusFactory.php
     - database/factories/SubjectFactory.php
     - database/factories/LessonFactory.php
     - database/factories/AttendanceFactory.php
-    - database/migrations/2024_05_23_032351_create_students_table.php
-    - database/migrations/2024_05_23_032352_create_teachers_table.php
-    - database/migrations/2024_05_23_032353_create_groups_table.php
-    - database/migrations/2024_05_23_032354_create_subjects_table.php
-    - database/migrations/2024_05_23_032355_create_lessons_table.php
-    - database/migrations/2024_05_23_032356_create_attendances_table.php
-    - database/migrations/2024_05_23_032357_create_subject_teacher_table.php
+    - database/migrations/2024_05_23_072644_create_students_table.php
+    - database/migrations/2024_05_23_072645_create_teachers_table.php
+    - database/migrations/2024_05_23_072646_create_groups_table.php
+    - database/migrations/2024_05_23_072647_create_group_statuses_table.php
+    - database/migrations/2024_05_23_072648_create_subjects_table.php
+    - database/migrations/2024_05_23_072649_create_lessons_table.php
+    - database/migrations/2024_05_23_072650_create_attendances_table.php
+    - database/migrations/2024_05_23_072651_create_subject_teacher_table.php
     - app/Models/Student.php
     - app/Models/Teacher.php
     - app/Models/Group.php
+    - app/Models/GroupStatus.php
     - app/Models/Subject.php
     - app/Models/Lesson.php
     - app/Models/Attendance.php
@@ -23,7 +26,7 @@ models:
     Student: { code: string, user_id: 'id foreign', group_id: 'id foreign', student_status_id: 'id foreign' }
     Teacher: { user_id: 'id foreign', relationships: { belongsToMany: Subject } }
     Specialty: { name: 'string unique', code: 'string unique' }
-    Group: { code: string, semester: 'integer default:1', specialty_id: 'id foreign', teacher_id: 'id foreign nullable', start_date: date }
+    Group: { code: string, semester: 'integer default:1', specialty_id: 'id foreign', teacher_id: 'id foreign nullable', start_date: date, group_status_id: 'id foreign' }
     Classroom: { name: 'string unique', number: 'integer unique' }
     LessonType: { short_name: 'string unique', name: 'string unique' }
     AttendanceOption: { short_name: 'string unique', name: 'string unique' }
@@ -32,3 +35,4 @@ models:
     Attendance: { mark: number, attendance_option_id: 'id foreign nullable', student_id: 'id foreign', lesson_id: 'id foreign' }
     InviteCode: { code: string, user_id: 'id foreign' }
     StudentStatus: { name: string }
+    GroupStatus: { name: string }

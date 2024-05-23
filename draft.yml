@@ -38,7 +38,7 @@ models:
     specialty_id: id foreign
     teacher_id: id foreign nullable
     start_date: date
-#    TODO maybe add is_free, group status
+    group_status_id: id foreign
 
   GroupStatus:
     name: string
@@ -63,7 +63,8 @@ models:
       belongsToMany: Teacher
 
   Lesson:
-    topic: string
+    topic: text
+    homework: text nullable
     timestamp: timestamp
     teacher_id: id foreign
     group_id: id foreign

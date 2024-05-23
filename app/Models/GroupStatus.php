@@ -6,7 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Specialty extends Model
+class GroupStatus extends Model
 {
     use CrudTrait;
     use HasFactory;
@@ -18,7 +18,6 @@ class Specialty extends Model
      */
     protected $fillable = [
         'name',
-        'code',
     ];
 
     /**
@@ -29,8 +28,4 @@ class Specialty extends Model
     protected $casts = [
         'id' => 'integer',
     ];
-
-    public function groups() {
-        return $this->hasMany(Group::class);
-    }
 }

@@ -34,6 +34,7 @@ class StudentCrudController extends CrudController
         CRUD::setModel(\App\Models\Student::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/student');
         CRUD::setEntityNameStrings('студента', 'студенты');
+        CRUD::setListView('student_list_with_filters');
     }
 
     /**
@@ -95,7 +96,8 @@ class StudentCrudController extends CrudController
         // Add this line to add custom query based on filter
         if (request()->has('group')) {
             $this->crud->addClause('where', 'group_id', request()->input('group'));
-        }    }
+        }
+    }
     /**
      * Define what happens when the Create operation is loaded.
      *

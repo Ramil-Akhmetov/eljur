@@ -61,10 +61,11 @@ class GroupCrudController extends CrudController
             'label' => 'Семестр',
         ]);
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        CRUD::addColumn([
+            'name' => 'groupStatus',
+            'label' => 'Статус',
+            'default' => 1,
+        ]);
     }
 
     /**
@@ -101,6 +102,12 @@ class GroupCrudController extends CrudController
             'name' => 'semester',
             'label' => 'Семестр',
             'type' => 'number',
+            'default' => 1,
+        ]);
+
+        CRUD::addField([
+            'name' => 'groupStatus',
+            'label' => 'Статус',
             'default' => 1,
         ]);
 
