@@ -17,31 +17,31 @@ models:
 #  StudentStatus:
 #    name: string
 
-  Student:
-    code: string
-    user_id: id foreign
-    group_id: id foreign
-    student_status_id: id foreign
-
-  Teacher:
-    user_id: id foreign
-    relationships:
-      belongsToMany: Subject
+#  Student:
+#    code: string
+#    user_id: id foreign
+#    group_id: id foreign
+#    student_status_id: id foreign
+#
+#  Teacher:
+#    user_id: id foreign
+#    relationships:
+#      belongsToMany: Subject
 
 #  Specialty:
 #    name: string unique
 #    code: string unique
 
-  Group:
-    code: string
-    semester: integer default:1
-    specialty_id: id foreign
-    teacher_id: id foreign nullable
-    start_date: date
-    group_status_id: id foreign
-
-  GroupStatus:
-    name: string
+#  Group:
+#    code: string
+#    semester: integer default:1
+#    specialty_id: id foreign
+#    teacher_id: id foreign nullable
+#    start_date: date
+#    group_status_id: id foreign
+#
+#  GroupStatus:
+#    name: string
 
 #  Classroom:
 #    name: string unique
@@ -55,28 +55,28 @@ models:
 #    short_name: string unique
 #    name: string unique
 
-  Subject:
-    specialty_id: id foreign
-    name: string
-    hours: integer
-    relationships:
-      belongsToMany: Teacher
-
-  Lesson:
-    topic: text
-    homework: text nullable
-    timestamp: timestamp
-    teacher_id: id foreign
-    group_id: id foreign
-    subject_id: id foreign
-    classroom_id: id foreign
-    lesson_type_id: id foreign
-
-  Attendance:
-    mark: number
-    attendance_option_id: id foreign nullable
-    student_id: id foreign
-    lesson_id: id foreign
+#  Subject:
+#    specialty_id: id foreign
+#    name: string
+#    hours: integer
+#    relationships:
+#      belongsToMany: Teacher
+#
+#  Lesson:
+#    topic: text
+#    homework: text nullable
+#    timestamp: timestamp
+#    teacher_id: id foreign
+#    group_id: id foreign
+#    subject_id: id foreign
+#    classroom_id: id foreign
+#    lesson_type_id: id foreign
+#
+#  Attendance:
+#    mark: number
+#    attendance_option_id: id foreign nullable
+#    student_id: id foreign
+#    lesson_id: id foreign
 
 #  InviteCode:
 #    code: string

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EljurController;
 use Illuminate\Support\Facades\Route;
 
 // --------------------------
@@ -30,4 +31,10 @@ Route::group([
     Route::crud('attendance-option', 'AttendanceOptionCrudController');
     Route::crud('subject', 'SubjectCrudController');
     Route::crud('invite-code', 'InviteCodeCrudController');
+
+
+
+    Route::get('/eljur/create', [EljurController::class, 'showCreateEljur']);
+    Route::get('/eljur/specialties/{groupId}', [EljurController::class, 'getSpecialties']);
+    Route::get('/eljur/journal/{groupId}/{specialtyId}', [EljurController::class, 'getJournalData']);
 }); // this should be the absolute last line of this file
