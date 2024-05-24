@@ -33,8 +33,7 @@ Route::group([
     Route::crud('invite-code', 'InviteCodeCrudController');
 
 
-
-    Route::get('/eljur/create', [EljurController::class, 'showCreateEljur']);
-    Route::get('/eljur/specialties/{groupId}', [EljurController::class, 'getSpecialties']);
-    Route::get('/eljur/journal/{groupId}/{specialtyId}', [EljurController::class, 'getJournalData']);
-}); // this should be the absolute last line of this file
+    Route::get('/eljur', [EljurController::class, 'showCreateEljur'])->name('eljur.create');
+    Route::get('/eljur/subjects/{groupId}', [EljurController::class, 'getSubjects']);
+    Route::get('/eljur/journal/{groupId}/{subjectId}', [EljurController::class, 'getJournalData']);
+});

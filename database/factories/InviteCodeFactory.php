@@ -23,7 +23,7 @@ class InviteCodeFactory extends Factory
     {
         return [
             'code' => $this->faker->word(),
-            'user_id' => User::factory(),
+            'user_id' => User::all()->random()->id,
         ];
     }
 }

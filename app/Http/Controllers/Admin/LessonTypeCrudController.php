@@ -32,6 +32,12 @@ class LessonTypeCrudController extends CrudController
         CRUD::setEntityNameStrings('тип лекций', 'типы лекций');
     }
 
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+    }
+
+
     /**
      * Define what happens when the List operation is loaded.
      *

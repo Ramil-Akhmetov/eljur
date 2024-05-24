@@ -2,50 +2,72 @@
 
 @php
     $defaultBreadcrumbs = [
-      trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
-      'Электронный журнал' => false,
+        trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
+        'Электронный журнал' => false,
     ];
     $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
 @endphp
 
 @section('header')
-    <section class="header-operation container-fluid animated fadeIn d-flex mb-2 align-items-baseline d-print-none"
-             bp-section="page-header">
+    <section class="header-operation container-fluid animated fadeIn d-flex mb-2 align-items-baseline d-print-none" bp-section="page-header">
         <h1 class="text-capitalize mb-0" bp-section="page-heading">Электронный журнал</h1>
-        <p class="ms-2 ml-2 mb-0" id="datatable_info_stack" bp-section="page-subheading">Выберите группу и специальность</p>
+        <p class="ms-2 ml-2 mb-0" id="datatable_info_stack" bp-section="page-subheading">Оценки студентов</p>
     </section>
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-md-4">
-            <label for="groupSelect">Выберите группу</label>
-            <select id="groupSelect" class="form-control">
+    <div class="container">
+        <div class="form-group mt-3" id="group-section">
+            <label for="group-select">Группа:</label>
+            <select id="group-select" class="form-control">
                 <option value="">Выберите группу</option>
-                @foreach ($groups as $group)
-                    <option value="{{ $group->id }}">{{ $group->code }}</option>
-                @endforeach
             </select>
         </div>
-        <div class="col-md-4">
-            <label for="specialtySelect">Специальность</label>
-            <select id="specialtySelect" class="form-control" disabled>
-                <option value="">Сначала выберите группу</option>
+        <div class="form-group mt-3" id="subject-section">
+            <label for="subject-select">Дисциплина:</label>
+            <select id="subject-select" class="form-control">
+                <option value="">Выберите дисциплину</option>
             </select>
         </div>
-    </div>
 
-    <div class="row mt-3" id="journalTableContainer" style="display: none;">
-        <div class="col-md-12">
+        <div class="table-responsive mt-3" id="journal-table">
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>ФИО студента</th>
-                    <!-- Add dynamically the date columns -->
+                    <th>Месяц</th>
+                    <th colspan="2">Сентябрь</th>
+                    <th colspan="2">Октябрь</th>
                 </tr>
                 </thead>
-                <tbody id="journalTableBody">
-                <!-- Student rows will be dynamically added here -->
+                <tbody id="journal-body">
+                <tr>
+                    <th>Число</th>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <th>Тема</th>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>ФИО</td>
+                    <td style="padding: 0; width: 45px"><input type="text" class="form-control d-flex bg-light" style="margin: 0; height: 45px"></td>
+                    <td style="padding: 0; width: 45px"><input type="text" class="form-control d-flex bg-light" style="margin: 0; height: 45px"></td>
+                    <td style="padding: 0; width: 45px"><input type="text" class="form-control d-flex bg-light" style="margin: 0; height: 45px"></td>
+                    <td style="padding: 0; width: 45px"><input type="text" class="form-control d-flex bg-light" style="margin: 0; height: 45px"></td>
+                </tr>
+                <tr>
+                    <td>ФИО</td>
+                    <td style="padding: 0; width: 45px"><input type="text" class="form-control d-flex bg-light" style="margin: 0; height: 45px"></td>
+                    <td style="padding: 0; width: 45px"><input type="text" class="form-control d-flex bg-light" style="margin: 0; height: 45px"></td>
+                    <td style="padding: 0; width: 45px"><input type="text" class="form-control d-flex bg-light" style="margin: 0; height: 45px"></td>
+                    <td style="padding: 0; width: 45px"><input type="text" class="form-control d-flex bg-light" style="margin: 0; height: 45px"></td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -54,55 +76,57 @@
 
 @section('after_scripts')
     <script>
-        document.getElementById('groupSelect').addEventListener('change', function() {
-            const groupId = this.value;
-
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const groupId = urlParams.get('group_id');
             if (groupId) {
-                fetch(`/eljur/specialties/${groupId}`)
+                fetch(`/eljur/subjects/${groupId}`)
                     .then(response => response.json())
                     .then(data => {
-                        const specialtySelect = document.getElementById('specialtySelect');
-                        specialtySelect.innerHTML = `<option value="${data.id}">${data.name}</option>`;
-                        specialtySelect.disabled = false;
-                    });
-            } else {
-                document.getElementById('specialtySelect').innerHTML = '<option value="">Сначала выберите группу</option>';
-                document.getElementById('specialtySelect').disabled = true;
-            }
-        });
-
-        document.getElementById('specialtySelect').addEventListener('change', function() {
-            const groupId = document.getElementById('groupSelect').value;
-            const specialtyId = this.value;
-
-            if (specialtyId) {
-                fetch(`/eljur/journal/${groupId}/${specialtyId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const journalTableContainer = document.getElementById('journalTableContainer');
-                        const journalTableBody = document.getElementById('journalTableBody');
-
-                        journalTableBody.innerHTML = '';
-                        journalTableContainer.style.display = 'block';
-
-                        data.students.forEach(student => {
-                            const row = document.createElement('tr');
-                            const cell = document.createElement('td');
-                            cell.textContent = `${student.user.surname} ${student.user.name} ${student.user.patronymic}`;
-                            row.appendChild(cell);
-                            journalTableBody.appendChild(row);
+                        const subjectSelect = document.getElementById('subject-select');
+                        data.forEach(subject => {
+                            const option = document.createElement('option');
+                            option.value = subject.id;
+                            option.textContent = subject.name;
+                            subjectSelect.appendChild(option);
                         });
-
-                        // Dynamically add date columns
-                        const dateColumns = data.subjects.map(subject => {
-                            return `<th>${subject.name}</th>`;
-                        }).join('');
-
-                        document.querySelector('thead tr').innerHTML += dateColumns;
+                        document.getElementById('subject-section').style.display = 'block';
                     });
-            } else {
-                document.getElementById('journalTableContainer').style.display = 'none';
+
+                document.getElementById('subject-select').addEventListener('change', function() {
+                    const subjectId = this.value;
+                    if (subjectId) {
+                        loadJournalTable(groupId, subjectId);
+                    }
+                });
             }
         });
+
+        function loadJournalTable(groupId, subjectId) {
+            fetch(`/eljur/journal/${groupId}/${subjectId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const journalBody = document.getElementById('journal-body');
+                    journalBody.innerHTML = '';
+                    data.students.forEach(student => {
+                        const row = document.createElement('tr');
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = `${student.user.surname} ${student.user.name} ${student.user.patronymic}`;
+                        row.appendChild(nameCell);
+
+                        data.lessonDates.forEach(date => {
+                            const dateCell = document.createElement('td');
+                            const input = document.createElement('input');
+                            input.type = 'number';
+                            input.className = 'form-control';
+                            input.name = `grades[${student.id}][${date}]`;
+                            dateCell.appendChild(input);
+                            row.appendChild(dateCell);
+                        });
+                        journalBody.appendChild(row);
+                    });
+                    document.getElementById('journal-table').style.display = 'block';
+                });
+        }
     </script>
 @endsection

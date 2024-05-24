@@ -21,7 +21,6 @@ class StudentCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
-//    use OldTransferStudentOperation;
     use TransferStudentOperation;
 
     /**
@@ -36,6 +35,12 @@ class StudentCrudController extends CrudController
         CRUD::setEntityNameStrings('студента', 'студенты');
         CRUD::setListView('student_list_with_filters');
     }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+    }
+
 
     /**
      * Define what happens when the List operation is loaded.
@@ -56,37 +61,109 @@ class StudentCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'user.surname',
             'label' => 'Фамилия',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('surname', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'students.user_id')
+                    ->orderBy('users.surname', $columnDirection)->select('students.*');
+            }
         ]);
         CRUD::addColumn([
             'name' => 'user.name',
             'label' => 'Имя',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'students.user_id')
+                    ->orderBy('users.name', $columnDirection)->select('students.*');
+            }
         ]);
         CRUD::addColumn([
             'name' => 'user.patronymic',
             'label' => 'Отчество',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('patronymic', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'students.user_id')
+                    ->orderBy('users.patronymic', $columnDirection)->select('students.*');
+            }
         ]);
 
         CRUD::addColumn([
             'name' => 'user.phone',
             'label' => 'Телефон',
             'type' => 'phone',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('phone', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'students.user_id')
+                    ->orderBy('users.phone', $columnDirection)->select('students.*');
+            }
+
         ]);
 
         CRUD::addColumn([
             'name' => 'user.email',
             'label' => 'email',
             'type' => 'Email',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('email', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'students.user_id')
+                    ->orderBy('users.email', $columnDirection)->select('students.*');
+            }
         ]);
 
         CRUD::addColumn([
             'name' => 'user.sex',
             'label' => 'Пол',
             'type' => 'enum',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('sex', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'students.user_id')
+                    ->orderBy('users.sex', $columnDirection)->select('students.*');
+            }
+
         ]);
         CRUD::addColumn([
             'name' => 'user.birthdate',
             'label' => 'День рождения',
             'type' => 'date',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('birthdate', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'students.user_id')
+                    ->orderBy('users.birthdate', $columnDirection)->select('students.*');
+            }
         ]);
         CRUD::addColumn([
             'name' => 'studentStatus',

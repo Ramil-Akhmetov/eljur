@@ -25,7 +25,7 @@ class AttendanceFactory extends Factory
     {
         return [
             'mark' => $this->faker->word(),
-            'attendance_option_id' => AttendanceOption::factory(),
+            'attendance_option_id' => AttendanceOption::all()->random()->id,
             'student_id' => Student::factory(),
             'lesson_id' => Lesson::factory(),
         ];

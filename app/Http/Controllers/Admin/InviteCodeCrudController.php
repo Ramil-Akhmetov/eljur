@@ -27,6 +27,11 @@ class InviteCodeCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/invite-code');
         CRUD::setEntityNameStrings('пригласительный код', 'пригласительные коды');
     }
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+    }
+
 
     /**
      * Define what happens when the List operation is loaded.
@@ -43,14 +48,44 @@ class InviteCodeCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'user.surname',
             'label' => 'Фамилия',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('surname', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'invite_codes.user_id')
+                    ->orderBy('users.surname', $columnDirection)->select('invite_codes.*');
+            }
         ]);
         CRUD::addColumn([
             'name' => 'user.name',
             'label' => 'Имя',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'invite_codes.user_id')
+                    ->orderBy('users.name', $columnDirection)->select('invite_codes.*');
+            }
         ]);
         CRUD::addColumn([
             'name' => 'user.patronymic',
             'label' => 'Отчество',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('patronymic', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'invite_codes.user_id')
+                    ->orderBy('users.patronymic', $columnDirection)->select('invite_codes.*');
+            }
         ]);
     }
 

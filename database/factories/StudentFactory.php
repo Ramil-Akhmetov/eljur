@@ -24,10 +24,10 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => $this->faker->word(),
-            'user_id' => User::factory(),
-            'group_id' => Group::factory(),
-            'student_status_id' => StudentStatus::factory(),
+            'code' => $this->faker->unique()->lexify('????'),
+            'user_id' => User::all()->random()->id,
+            'group_id' => Group::all()->random()->id,
+            'student_status_id' => 1,
         ];
     }
 }

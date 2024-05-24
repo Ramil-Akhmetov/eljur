@@ -32,6 +32,12 @@ class SubjectCrudController extends CrudController
         CRUD::setEntityNameStrings('subject', 'subjects');
     }
 
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+    }
+
+
     /**
      * Define what happens when the List operation is loaded.
      *
@@ -48,6 +54,16 @@ class SubjectCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'specialty',
             'label' => 'Специальность',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('specialty', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('specialties', 'specialties.id', '=', 'subjects.specialty_id')
+                    ->orderBy('specialties.name', $columnDirection)->select('subjects.*');
+            }
         ]);
 
         CRUD::addColumn([
@@ -55,10 +71,12 @@ class SubjectCrudController extends CrudController
             'label' => 'Количество часов',
         ]);
 
+        // TODO maybe crate custom column
         CRUD::addColumn([
             'name' => 'teachers',
             'label' => 'Преподаватели',
             'type' => 'select_multiple',
+            'attribute' => 'user.surname',
         ]);
     }
 
@@ -91,10 +109,12 @@ class SubjectCrudController extends CrudController
             'label' => 'Количество часов',
         ]);
 
-        // TODO debug this
+        // TODO teacher's names doesn't show
         CRUD::addField([
             'name' => 'teachers',
             'label' => 'Преподаватели',
+            'type' => 'select_multiple',
+            'attribute' => 'user.surname',
         ]);
     }
 

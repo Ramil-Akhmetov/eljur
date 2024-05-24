@@ -31,6 +31,11 @@ class GroupCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/group');
         CRUD::setEntityNameStrings('группу', 'группы');
     }
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+    }
+
 
     /**
      * Define what happens when the List operation is loaded.
@@ -48,6 +53,11 @@ class GroupCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'specialty',
             'label' => 'Специальность',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('specialty', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%' . $searchTerm . '%');
+                });
+            }
         ]);
 
         CRUD::addColumn([

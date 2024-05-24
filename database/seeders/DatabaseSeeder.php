@@ -3,13 +3,17 @@
 namespace Database\Seeders;
 
 use App\Models\AttendanceOption;
+use App\Models\Classroom;
 use App\Models\Group;
 use App\Models\GroupStatus;
 use App\Models\LessonType;
 use App\Models\Role;
 use App\Models\Specialty;
+use App\Models\Student;
 use App\Models\StudentStatus;
+use App\Models\Subject;
 use App\Models\User;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,17 +24,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        Role::factory()->create([
-            'name' => 'Администратор',
-        ]);
-        Role::factory()->create([
-            'name' => 'Студент',
-        ]);
-        Role::factory()->create([
-            'name' => 'Преподаватель',
-        ]);
+        Role::factory()->create(['name' => 'Администратор']);
+        Role::factory()->create(['name' => 'Преподаватель']);
+        Role::factory()->create(['name' => 'Студент']);
 
         User::factory()->create([
             'name' => 'admin',
@@ -51,10 +47,32 @@ class DatabaseSeeder extends Seeder
         AttendanceOption::factory()->create(['short_name' => 'Н', 'name' => 'Неуважительная причина']);
         AttendanceOption::factory()->create(['short_name' => 'У', 'name' => 'Уважительная причина']);
 
-        Specialty::factory(5)->create();
-
         GroupStatus::factory()->create(['name' => 'Не активна']);
         GroupStatus::factory()->create(['name' => 'Активен']);
         GroupStatus::factory()->create(['name' => 'Выпустилась']);
+
+        // Seeding
+        Classroom::factory(20)->create();
+        Specialty::factory(10)->create();
+
+        Subject::factory(50)->create();
+
+        $teacherUsers = User::factory(5)->create([
+            'role_id' => 2,
+        ]);
+        $teacherUsers->each(function ($user) {
+            $teacher = $user->teacher()->create();
+            $teacher->subjects()->sync(Subject::all()->random(10));
+        });
+
+        $groups = Group::factory(10)->create();
+        $groups->each(function ($group) {
+            $studentUsers = User::factory(20)->create([
+                'role_id' => 3,
+            ]);
+            $studentUsers->each(function ($user) use ($group) {
+                $student = Student::factory()->create(['user_id' => $user->id, 'group_id' => $group->id]);
+            });
+        });
     }
 }

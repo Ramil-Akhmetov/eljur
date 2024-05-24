@@ -31,6 +31,12 @@ class TeacherCrudController extends CrudController
         CRUD::setEntityNameStrings('teacher', 'teachers');
     }
 
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+    }
+
+
     /**
      * Define what happens when the List operation is loaded.
      *
@@ -39,42 +45,112 @@ class TeacherCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-//        CRUD::setFromDb(); // set columns from db columns.
-
         CRUD::addColumn([
             'name' => 'user.surname',
             'label' => 'Фамилия',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('surname', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'teachers.user_id')
+                    ->orderBy('users.surname', $columnDirection)->select('teachers.*');
+            }
         ]);
         CRUD::addColumn([
             'name' => 'user.name',
             'label' => 'Имя',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'teachers.user_id')
+                    ->orderBy('users.name', $columnDirection)->select('teachers.*');
+            }
         ]);
         CRUD::addColumn([
             'name' => 'user.patronymic',
             'label' => 'Отчество',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('patronymic', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'teachers.user_id')
+                    ->orderBy('users.patronymic', $columnDirection)->select('teachers.*');
+            }
         ]);
 
         CRUD::addColumn([
             'name' => 'user.phone',
             'label' => 'Телефон',
             'type' => 'phone',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('phone', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'teachers.user_id')
+                    ->orderBy('users.phone', $columnDirection)->select('teachers.*');
+            }
+
         ]);
 
         CRUD::addColumn([
             'name' => 'user.email',
             'label' => 'email',
             'type' => 'Email',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('email', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'teachers.user_id')
+                    ->orderBy('users.email', $columnDirection)->select('teachers.*');
+            }
         ]);
 
         CRUD::addColumn([
-            'name'  => 'user.sex',
+            'name' => 'user.sex',
             'label' => 'Пол',
-            'type'  => 'enum',
+            'type' => 'enum',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('sex', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'teachers.user_id')
+                    ->orderBy('users.sex', $columnDirection)->select('teachers.*');
+            }
+
         ]);
         CRUD::addColumn([
-            'name'  => 'user.birthdate',
+            'name' => 'user.birthdate',
             'label' => 'День рождения',
-            'type'  => 'date',
+            'type' => 'date',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('birthdate', 'like', '%' . $searchTerm . '%');
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('users', 'users.id', '=', 'teachers.user_id')
+                    ->orderBy('users.birthdate', $columnDirection)->select('teachers.*');
+            }
         ]);
 
         CRUD::addColumn([
@@ -100,13 +176,13 @@ class TeacherCrudController extends CrudController
             'name' => 'subjects',
             'type' => 'select_multiple',
             // optional
-            'entity'    => 'subjects', // the method that defines the relationship in your Model
-            'model'     => "App\Models\Subject", // foreign key model
+            'entity' => 'subjects', // the method that defines the relationship in your Model
+            'model' => "App\Models\Subject", // foreign key model
             'attribute' => 'name',
-            'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+            'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
 
             // also optional
-            'options'   => (function ($query) {
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }), // force the related options to be a custom query, instead of all(); y
         ]);

@@ -22,9 +22,9 @@ class SubjectFactory extends Factory
     public function definition(): array
     {
         return [
-            'specialty_id' => Specialty::factory(),
-            'name' => $this->faker->name(),
-            'hours' => $this->faker->numberBetween(-10000, 10000),
+            'specialty_id' => Specialty::all()->random()->id,
+            'name' => $this->faker->word(),
+            'hours' => $this->faker->numberBetween(20, 500),
         ];
     }
 }

@@ -32,6 +32,12 @@ class SpecialtyCrudController extends CrudController
         CRUD::setEntityNameStrings('специальность', 'специальности');
     }
 
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+    }
+
+
     /**
      * Define what happens when the List operation is loaded.
      *
@@ -41,13 +47,12 @@ class SpecialtyCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::addColumn([
-            'name' => 'name',
-            'label' => 'Название',
-        ]);
-
-        CRUD::addColumn([
             'name' => 'code',
             'label' => 'Код',
+        ]);
+        CRUD::addColumn([
+            'name' => 'name',
+            'label' => 'Название',
         ]);
     }
 
@@ -66,13 +71,13 @@ class SpecialtyCrudController extends CrudController
         }
 
         CRUD::addField([
-            'name' => 'name',
-            'label' => 'Название',
+            'name' => 'code',
+            'label' => 'Код',
         ]);
 
         CRUD::addField([
-            'name' => 'code',
-            'label' => 'Код',
+            'name' => 'name',
+            'label' => 'Название',
         ]);
     }
 

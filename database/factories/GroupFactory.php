@@ -25,11 +25,11 @@ class GroupFactory extends Factory
     {
         return [
             'code' => $this->faker->word(),
-            'semester' => $this->faker->numberBetween(-10000, 10000),
-            'specialty_id' => Specialty::random()->id,
-            'teacher_id' => Teacher::random()->id,
+            'semester' => $this->faker->numberBetween(1, 8),
+            'specialty_id' => Specialty::all()->random()->id,
+            'teacher_id' => Teacher::all()->random()->id,
             'start_date' => $this->faker->date(),
-            'group_status_id' => GroupStatus::factory(),
+            'group_status_id' => GroupStatus::all()->random()->id,
         ];
     }
 }
