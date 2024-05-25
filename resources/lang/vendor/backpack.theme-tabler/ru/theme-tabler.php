@@ -2,7 +2,7 @@
 
 return [
     // color mode
-    'color-mode-description' => 'Использовать :mode тему', //TODO can't see this variable
+    'color-mode-description' => 'Использовать :mode тему',
     'color-mode-system' => 'системную',
     'color-mode-light' => 'светлую',
     'color-mode-dark' => 'темную',

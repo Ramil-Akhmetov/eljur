@@ -93,7 +93,10 @@ trait CreateTeacherOperation
 
             if(! $entry->teacher) {
                 $entry->role_id = Role::where('name', 'Преподаватель')->first()->id;
-                $entry->teacher()->create()->subjects()->attach($valid['teacherSubjects']);
+                $entry->teacher()->create();
+                if(isset($valid['teacherSubjects'])){
+                    $entry->teacher()->subjects()->attach($valid['teacherSubjects']);
+                }
                 $entry->save();
             } else {
                 \Alert::error('Пользователь уже является преподавателем')->flash();

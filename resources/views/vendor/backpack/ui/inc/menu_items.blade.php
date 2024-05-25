@@ -3,7 +3,7 @@
             class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
 
 <x-backpack::menu-dropdown title="Электронный журнал" icon="la la-school">
-    <x-backpack::menu-dropdown-item title="Журнал преподавателя" icon="la la-question" :link="backpack_url('eljur/create')" />
+    <x-backpack::menu-dropdown-item title="Журнал преподавателя" icon="la la-question" :link="backpack_url('eljur?group_id=1')" />
 </x-backpack::menu-dropdown>
 
 <x-backpack::menu-dropdown title="Управление пользователями" icon="la la-group">
