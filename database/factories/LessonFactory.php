@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\TeacherGroupSubject;
+use App\Models\Topic;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Classroom;
@@ -25,14 +27,24 @@ class LessonFactory extends Factory
      */
     public function definition(): array
     {
+//        $teacherGroupSubject = TeacherGroupSubject::all()->random();
+//
+//        $group = $teacherGroupSubject->group_id;
+//        $subject = $teacherGroupSubject->teacherSubject->subject_id;
+//        $teacher = $teacherGroupSubject->teacherSubject->teacher_id;
+
+        $group = Group::all()->random()->id;
+        $subject = Subject::all()->random()->id;
+        $teacher = Teacher::all()->random()->id;
+
         return [
-            'topic' => $this->faker->word(),
-            'timestamp' => $this->faker->dateTime(),
-            'teacher_id' => Teacher::factory(),
-            'group_id' => Group::factory(),
-            'subject_id' => Subject::factory(),
-            'classroom_id' => Classroom::factory(),
-            'lesson_type_id' => LessonType::factory(),
+            'date' => $this->faker->dateTimeBetween('-2months', 'now')->format('Y-m-d'),
+            'topic' => $this->faker->sentence,
+            'teacher_id' => $teacher,
+            'group_id' => $group,
+            'subject_id' => $subject,
+            'classroom_id' => Classroom::all()->random()->id,
+            'lesson_type_id' => LessonType::all()->random()->id,
         ];
     }
 }

@@ -21,7 +21,7 @@ class SpecialtyFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => $this->faker->unique()->lexify('??.??.??'),
+            'code' => $this->faker->unique()->bothify('##.##.##'),
             'name' => $this->faker->unique()->sentence(),
         ];
     }

@@ -28,4 +28,9 @@ class StudentStatus extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function students()
+    {
+        return $this->hasMany(\App\Models\Student::class);
+    }
 }

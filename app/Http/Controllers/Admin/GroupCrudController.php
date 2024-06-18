@@ -61,6 +61,12 @@ class GroupCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
+            'name' => 'teacher',
+            'label' => 'Классный руководитель',
+            'attribute' => 'full_name',
+        ]);
+
+        CRUD::addColumn([
             'name' => 'start_date',
             'label' => 'Дата формирования',
             'type' => 'date',
@@ -69,6 +75,7 @@ class GroupCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'semester',
             'label' => 'Семестр',
+            'attribute' => 'number',
         ]);
 
         CRUD::addColumn([
@@ -111,7 +118,7 @@ class GroupCrudController extends CrudController
         CRUD::addField([
             'name' => 'semester',
             'label' => 'Семестр',
-            'type' => 'number',
+            'attribute' => 'number',
             'default' => 1,
         ]);
 
@@ -124,6 +131,7 @@ class GroupCrudController extends CrudController
         CRUD::addField([
             'name' => 'teacher',
             'label' => 'Классный руководитель',
+            'attribute' => 'full_name',
         ]);
     }
 

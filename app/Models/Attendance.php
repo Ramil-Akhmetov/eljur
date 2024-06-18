@@ -16,7 +16,6 @@ class Attendance extends Model
      * @var array
      */
     protected $fillable = [
-        'mark',
         'attendance_option_id',
         'student_id',
         'lesson_id',

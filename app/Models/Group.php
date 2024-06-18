@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,7 +20,6 @@ class Group extends Model
      */
     protected $fillable = [
         'code',
-        'semester',
         'specialty_id',
         'teacher_id',
         'start_date',
@@ -49,8 +49,68 @@ class Group extends Model
         return $this->belongsTo(Teacher::class);
     }
 
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    public function subjects()
+    {
+        return $this->hasManyThrough(Subject::class, Specialty::class);
+    }
+
+    public function semester(): BelongsTo
+    {
+        return $this->belongsTo(Semester::class);
+    }
+
     public function groupStatus(): BelongsTo
     {
         return $this->belongsTo(GroupStatus::class);
+    }
+
+    protected $appends = ['current_semester'];
+
+//    public function getCurrentSemesterAttribute()
+//    {
+//        // Semester have only number field, 1 - first semester, 2 - second semester, 3 - summer semester...
+//
+//        // static
+//        $firstSemesterStart = \date('Y') . '-09-01';
+//        $firstSemesterEnd = \date('Y') . '-01-31';
+//        $secondSemesterStart = \date('Y') . '-01-01';
+//        $secondSemesterEnd = \date('Y') . '-06-30';
+//
+//        $currentDate = \date('Y-m-d');
+//        $isSecondHalf = \strtotime($currentDate) > \strtotime($secondSemesterStart);
+//
+//        $groupStartDate = $this->start_date;
+//        $groupAge = floor($groupStartDate->diffInYears($currentDate));
+//
+//        $semesterNumber = 1 + $groupAge * 2 + ($isSecondHalf ? 1 : 0);
+//
+//
+//        return Semester::where('number', $semesterNumber)->first();
+//    }
+
+    public function getCurrentSemesterAttribute()
+    {
+        $startDate = new DateTime($this->date);
+        $secondSemesterStart = new DateTime(date('Y') . '-01-01');
+        $currentDate = new DateTime();
+
+        // Determine if the current date is in the second half of the year
+        $isSecondHalf = $currentDate > $secondSemesterStart;
+
+        // Calculate the age difference in years
+        $groupAge = $startDate->diff($currentDate)->y;
+
+        // Calculate the semester number
+        $semesterNumber = 1 + $groupAge * 2 + ($isSecondHalf ? 1 : 0);
+
+        // Fetch the semester or default to semester number 8
+        $semester = Semester::where('number', $semesterNumber)->first();
+
+        return $semester;
     }
 }

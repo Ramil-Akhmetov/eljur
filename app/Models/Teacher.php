@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Teacher extends Model
 {
-    use CrudTrait;
     use HasFactory;
+    use CrudTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -32,25 +32,33 @@ class Teacher extends Model
         'user_id' => 'integer',
     ];
 
+    protected $appends = ['full_name'];
+
     public function subjects(): BelongsToMany
     {
-        return $this->belongsToMany(Subject::class);
+        return $this->belongsToMany(Subject::class, 'teacher_subject');
     }
-    public function subjectsForGroup($groupId)
-    {
-        $group = Group::find($groupId);
-        if ($group) {
-            $specialtyId = $group->specialty_id;
-            return $this->subjects()->where('specialty_id', $specialtyId)->get();
-        }
-        return collect();
-    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-    public function groups()
+
+    public function getFullNameAttribute()
     {
-        return $this->hasManyThrough(Group::class, Subject::class, 'specialty_id', 'specialty_id', 'id', 'id');
+        return $this->user->surname . ' ' . $this->user->name . ' ' . $this->user->patronymic;
+    }
+
+    public function subjectsForGroup($group_id)
+    {
+        // use TeacherGroupSubject;
+
+        return TeacherGroupSubject::
+        where('group_id', $group_id)
+            ->whereHas('teacherSubject', function ($query) {
+                $query->where('teacher_id', $this->id);
+            })->get()->map(function ($item) {
+                return $item->teacherSubject->subject;
+            })->unique('id');
     }
 }

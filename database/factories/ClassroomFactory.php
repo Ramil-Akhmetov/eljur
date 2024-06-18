@@ -21,8 +21,8 @@ class ClassroomFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'number' => $this->faker->numberBetween(-10000, 10000),
+            'name' => $this->faker->unique()->sentence(),
+            'number' => $this->faker->unique()->numberBetween(101, 399),
         ];
     }
 }

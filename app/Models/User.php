@@ -78,4 +78,5 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Subject::class, Teacher::class, 'user_id', 'id', 'id', 'subject_id');
     }
+
 }

@@ -28,6 +28,7 @@ class SubjectRequest extends FormRequest
             'name' => 'required|max:255',
             'specialty' => 'required|exists:specialties,id',
             'hours' => 'required|numeric',
+            'semesters' => 'required',
             'teachers' => 'sometimes',
             'teachers.*' => 'exists:teachers,id',
         ];

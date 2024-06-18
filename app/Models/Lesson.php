@@ -17,7 +17,7 @@ class Lesson extends Model
      */
     protected $fillable = [
         'topic',
-        'timestamp',
+        'date',
         'teacher_id',
         'group_id',
         'subject_id',
@@ -32,7 +32,7 @@ class Lesson extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'timestamp' => 'timestamp',
+        'date' => 'date',
         'teacher_id' => 'integer',
         'group_id' => 'integer',
         'subject_id' => 'integer',

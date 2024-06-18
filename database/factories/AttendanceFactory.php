@@ -23,11 +23,12 @@ class AttendanceFactory extends Factory
      */
     public function definition(): array
     {
+        $lesson = Lesson::all()->random();
+        $student = Student::where('group_id', $lesson->group_id)->get()->random();
         return [
-            'mark' => $this->faker->word(),
-            'attendance_option_id' => AttendanceOption::all()->random()->id,
-            'student_id' => Student::factory(),
-            'lesson_id' => Lesson::factory(),
+            'attendance_option_id' => AttendanceOption::where('type', 'attendance')->get()->random()->id,
+            'student_id' => $student->id,
+            'lesson_id' => $lesson->id,
         ];
     }
 }

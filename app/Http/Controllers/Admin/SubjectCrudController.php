@@ -29,7 +29,7 @@ class SubjectCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Subject::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/subject');
-        CRUD::setEntityNameStrings('subject', 'subjects');
+        CRUD::setEntityNameStrings('дисциплину', 'дисциплины');
     }
 
     protected function setupShowOperation()
@@ -71,12 +71,24 @@ class SubjectCrudController extends CrudController
             'label' => 'Количество часов',
         ]);
 
-        // TODO maybe crate custom column
+        CRUD::addColumn([
+            'name' => 'hoursleft',
+            'label' => 'Количество часов',
+            'attribute' => 'hoursleft',
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'semesters',
+            'label' => 'Семестры',
+            'type' => 'select_multiple',
+            'attribute' => 'number',
+        ]);
+
         CRUD::addColumn([
             'name' => 'teachers',
             'label' => 'Преподаватели',
             'type' => 'select_multiple',
-            'attribute' => 'user.surname',
+            'attribute' => 'full_name',
         ]);
     }
 
@@ -109,12 +121,29 @@ class SubjectCrudController extends CrudController
             'label' => 'Количество часов',
         ]);
 
-        // TODO teacher's names doesn't show
+        CRUD::addField([
+            'name' => 'semesters',
+            'label' => 'Семестры',
+            'type' => 'select_multiple',
+            'attribute' => 'number',
+        ]);
+
         CRUD::addField([
             'name' => 'teachers',
             'label' => 'Преподаватели',
             'type' => 'select_multiple',
-            'attribute' => 'user.surname',
+            'entity' => 'teachers', // the method that defines the relationship in your Model
+            'model' => "App\Models\Teacher", // foreign key model
+            'attribute' => 'full_name', // Use the full_name accessor
+            'pivot' => true,
+
+            'options' => (function ($query) {
+                return $query->join('users', 'teachers.user_id', '=', 'users.id')
+                    ->select('teachers.*')
+                    ->with('user')
+                    ->orderBy('users.surname', 'ASC')
+                    ->get();
+            }),
         ]);
     }
 

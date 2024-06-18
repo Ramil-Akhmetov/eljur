@@ -21,8 +21,8 @@ class LessonTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'short_name' => $this->faker->word(),
-            'name' => $this->faker->name(),
+            'short_name' => $this->faker->unique()->word(),
+            'name' => $this->faker->unique()->name(),
         ];
     }
 }

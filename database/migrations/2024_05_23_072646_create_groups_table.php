@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->integer('semester')->default(1);
+            $table->foreignId('semester_id')->constrained();
             $table->foreignId('specialty_id')->constrained();
             $table->foreignId('teacher_id')->nullable()->constrained();
             $table->date('start_date');

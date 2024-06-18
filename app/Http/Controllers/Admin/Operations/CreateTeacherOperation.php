@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin\Operations;
 
 use App\Models\Role;
+use App\Models\Teacher;
 use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\Operations\Concerns\HasForm;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 trait CreateTeacherOperation
@@ -44,19 +47,24 @@ trait CreateTeacherOperation
         );
 
         $this->crud->operation('createTeacher', function () {
+            $this->crud->setSubheading('Сделать преподавателем');
+
             $this->crud->addField([
                 'name' => 'teacherSubjects',
-                'label' => 'Предметы',
+                'label' => 'Дисциплины',
                 'type' => 'select_multiple',
-                // optional
-                'entity'    => 'teacherSubjects', // the method that defines the relationship in your Model
-                'model'     => "App\Models\Subject", // foreign key model
-                'attribute' => 'name',
-                'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+                'entity' => 'teacherSubjects', // the method that defines the relationship in your Model
+                'model' => "App\Models\Subject", // foreign key model
+                'attribute' => 'full_name',
+                'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
 
-                // also optional
-                'options'   => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->get();
+                'options' => (function ($query) {
+                    return $query->join('specialties', 'subjects.specialty_id', '=', 'specialties.id')
+                        ->select('subjects.*') // make sure to select subjects.* to avoid overriding subject attributes
+                        ->with('specialty')
+                        ->orderBy('specialties.code', 'ASC')
+                        ->orderBy('subjects.name', 'ASC')
+                        ->get();
                 }), // force the related options to be a custom query, instead of all(); y
             ]);
         });
@@ -68,7 +76,7 @@ trait CreateTeacherOperation
 
         $user = User::find($id);
 
-        if($user->teacher) {
+        if ($user->teacher) {
             return redirect(config('backpack.base.route_prefix') . '/teacher/' . $user->teacher->id . '/edit');
         }
 
@@ -91,16 +99,30 @@ trait CreateTeacherOperation
                 'teacherSubjects.*' => 'required|exists:subjects,id',
             ])->validate();
 
-            if(! $entry->teacher) {
-                $entry->role_id = Role::where('name', 'Преподаватель')->first()->id;
-                $entry->teacher()->create();
-                if(isset($valid['teacherSubjects'])){
-                    $entry->teacher()->subjects()->attach($valid['teacherSubjects']);
-                }
-                $entry->save();
-            } else {
-                \Alert::error('Пользователь уже является преподавателем')->flash();
+            if ($entry->role && $entry->role->name == 'Студент') {
+                \Alert::error('Пользователь уже является студентом')->flash();
+                return;
             }
+
+            if ($entry->teacher) {
+                \Alert::error('Пользователь уже является преподавателем')->flash();
+                return;
+            }
+
+            DB::transaction(function () use ($entry, $valid) {
+                $user = User::find($entry->id);
+//                dd($user->id);
+
+                $user->role_id = Role::where('name', 'Преподаватель')->first()->id;
+                $teacher = Teacher::create([
+                    'user_id' => $user->id,
+                ]);
+                if (isset($valid['teacherSubjects'])) {
+                    $teacher->subjects()->sync($valid['teacherSubjects']);
+                }
+                $user->save();
+            });
+
 
             // show a success message
             \Alert::success('Запись была успешно добавлена.')->flash();

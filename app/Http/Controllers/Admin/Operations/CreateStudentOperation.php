@@ -44,6 +44,8 @@ trait CreateStudentOperation
         );
 
         $this->crud->operation('createStudent', function () {
+            $this->crud->setSubheading('Сделать студентом');
+
             $this->crud->addField([
                 'name' => 'code',
                 'label' => 'Код',
@@ -53,19 +55,6 @@ trait CreateStudentOperation
                 'name' => 'group',
                 'label' => 'Группа',
                 'entity' => 'student.group',
-            ]);
-            $this->crud->addField([
-                'name' => 'student_status',
-                'label' => 'Статус',
-                'type' => 'select',
-                'default' => 1,
-                'entity' => 'student.studentStatus',
-                'model' => 'App\Models\StudentStatus',
-                'attribute' => 'name',
-
-                'options' => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->get();
-                }), //  you can use this to filter the results show in the select            ]);
             ]);
         });
     }
@@ -97,20 +86,24 @@ trait CreateStudentOperation
             $valid = Validator::make($inputs, [
                 'code' => 'required|unique:students',
                 'group' => 'required|exists:groups,id',
-                'student_status' => 'required|exists:student_statuses,id',
             ])->validate();
 
-            if (!$entry->student) {
-                $entry->role_id = Role::where('name', 'Студент')->first()->id;
-                $entry->student()->create([
-                    'code' => $valid['code'],
-                    'group_id' => $valid['group'],
-                    'student_status_id' => $valid['student_status'],
-                ]);
-                $entry->save();
-            } else {
-                \Alert::error('Пользователь уже является студентом')->flash();
+            if ($entry->role && $entry->role->name == 'Преподаватель') {
+                \Alert::error('Пользователь уже является преподавателем')->flash();
+                return;
             }
+            if ($entry->student) {
+                \Alert::error('Пользователь уже является студентом')->flash();
+                return;
+            }
+
+            $entry->role_id = Role::where('name', 'Студент')->first()->id;
+            $entry->student()->create([
+                'code' => $valid['code'],
+                'group_id' => $valid['group'],
+                'student_status_id' => 1,
+            ]);
+            $entry->save();
 
             \Alert::success('Запись была успешно добавлена.')->flash();
         });

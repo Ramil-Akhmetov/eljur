@@ -23,8 +23,8 @@ class SubjectFactory extends Factory
     {
         return [
             'specialty_id' => Specialty::all()->random()->id,
-            'name' => $this->faker->word(),
-            'hours' => $this->faker->numberBetween(20, 500),
+            'name' => $this->faker->unique()->word(),
+            'hours' => $this->faker->numberBetween(10, 100),
         ];
     }
 }

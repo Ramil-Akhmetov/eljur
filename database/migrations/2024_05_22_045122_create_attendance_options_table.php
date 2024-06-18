@@ -15,8 +15,9 @@ return new class extends Migration
 
         Schema::create('attendance_options', function (Blueprint $table) {
             $table->id();
-            $table->string('short_name')->unique();
-            $table->string('name')->unique();
+            $table->string('short_name');
+            $table->string('name');
+            $table->enum('type', ['attendance', 'grade'])->default('attendance');
             $table->timestamps();
         });
 

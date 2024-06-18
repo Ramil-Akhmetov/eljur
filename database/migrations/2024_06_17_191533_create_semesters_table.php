@@ -13,15 +13,9 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('lessons', function (Blueprint $table) {
+        Schema::create('semesters', function (Blueprint $table) {
             $table->id();
-            $table->string('topic');
-            $table->timestamp('timestamp');
-            $table->foreignId('teacher_id')->constrained();
-            $table->foreignId('group_id')->constrained();
-            $table->foreignId('subject_id')->constrained();
-            $table->foreignId('classroom_id')->constrained();
-            $table->foreignId('lesson_type_id')->constrained();
+            $table->integer('number');
             $table->timestamps();
         });
 
@@ -33,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lessons');
+        Schema::dropIfExists('semesters');
     }
 };

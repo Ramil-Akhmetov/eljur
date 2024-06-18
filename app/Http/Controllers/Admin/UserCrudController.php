@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Operations\OldCreateTeacherOperation;
 use App\Http\Controllers\InviteCodeController;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\InviteCode;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Termwind\Components\Dd;
@@ -81,7 +82,7 @@ class UserCrudController extends CrudController
         ]);
         CRUD::addColumn([
             'name'  => 'birthdate',
-            'label' => 'День рождения',
+            'label' => 'Дата рождения',
             'type'  => 'date',
         ]);
         CRUD::addColumn([
@@ -118,18 +119,13 @@ class UserCrudController extends CrudController
             'label' => 'Телефон',
         ]);
         CRUD::addField([
-            'name' => 'role',
-            'label' => 'Роль',
-        ]);
-
-        CRUD::addField([
             'name'  => 'sex',
             'label' => 'Пол',
             'type'  => 'enum',
         ]);
         CRUD::addField([
             'name'  => 'birthdate',
-            'label' => 'День рождения',
+            'label' => 'Дата рождения',
             'type'  => 'date',
         ]);
         CRUD::addField([
@@ -180,7 +176,7 @@ class UserCrudController extends CrudController
         ]);
         CRUD::addField([
             'name'  => 'birthdate',
-            'label' => 'День рождения',
+            'label' => 'Дата рождения',
             'type'  => 'date',
         ]);
         CRUD::addField([
@@ -236,5 +232,18 @@ class UserCrudController extends CrudController
         $response = $this->traitUpdate();
         // do something after save
         return $response;
+    }
+
+    public function destroy($id)
+    {
+        $this->crud->hasAccessOrFail('delete');
+
+        // get entry ID from Request (makes sure its the last ID for nested resources)
+        $id = $this->crud->getCurrentEntryId() ?? $id;
+
+        $invite_code = InviteCode::where('user_id', $id)->first();
+        $invite_code->delete();
+
+        return $this->crud->delete($id);
     }
 }

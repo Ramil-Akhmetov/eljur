@@ -1,26 +1,7 @@
 created:
-    - database/factories/StudentFactory.php
-    - database/factories/TeacherFactory.php
-    - database/factories/GroupFactory.php
-    - database/factories/GroupStatusFactory.php
-    - database/factories/SubjectFactory.php
-    - database/factories/LessonFactory.php
-    - database/factories/AttendanceFactory.php
-    - database/migrations/2024_05_23_072644_create_students_table.php
-    - database/migrations/2024_05_23_072645_create_teachers_table.php
-    - database/migrations/2024_05_23_072646_create_groups_table.php
-    - database/migrations/2024_05_23_072647_create_group_statuses_table.php
-    - database/migrations/2024_05_23_072648_create_subjects_table.php
-    - database/migrations/2024_05_23_072649_create_lessons_table.php
-    - database/migrations/2024_05_23_072650_create_attendances_table.php
-    - database/migrations/2024_05_23_072651_create_subject_teacher_table.php
-    - app/Models/Student.php
-    - app/Models/Teacher.php
-    - app/Models/Group.php
-    - app/Models/GroupStatus.php
-    - app/Models/Subject.php
-    - app/Models/Lesson.php
-    - app/Models/Attendance.php
+    - database/factories/GradeSemesterFactory.php
+    - database/migrations/2024_06_18_013114_create_grade_semesters_table.php
+    - app/Models/GradeSemester.php
 models:
     Role: { name: 'string unique' }
     Student: { code: string, user_id: 'id foreign', group_id: 'id foreign', student_status_id: 'id foreign' }
@@ -36,3 +17,11 @@ models:
     InviteCode: { code: string, user_id: 'id foreign' }
     StudentStatus: { name: string }
     GroupStatus: { name: string }
+    Topic: { subject_id: 'id foreign', name: string, hours: integer }
+    TeacherGroupSubject: { subject_teacher_id: 'id foreign', group_id: 'id foreign' }
+    SubjectTeacher: { subject_id: 'id foreign', teacher_id: 'id foreign' }
+    TeacherSubject: { subject_id: 'id foreign', teacher_id: 'id foreign' }
+    Semester: { number: integer, relationships: { belongsToMany: Sbt } }
+    Sbt: { specialty_id: 'id foreign', name: string, hours: integer, relationships: { belongsToMany: Semester } }
+    GradeMonth: { attendance_option_id: 'id foreign', student_id: 'id foreign', subject_id: 'id foreign', date: date }
+    GradeSemester: { attendance_option_id: 'id foreign', student_id: 'id foreign', subject_id: 'id foreign', semester_id: 'id foreign' }

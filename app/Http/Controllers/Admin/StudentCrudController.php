@@ -152,7 +152,7 @@ class StudentCrudController extends CrudController
         ]);
         CRUD::addColumn([
             'name' => 'user.birthdate',
-            'label' => 'День рождения',
+            'label' => 'Дата рождения',
             'type' => 'date',
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
@@ -191,10 +191,6 @@ class StudentCrudController extends CrudController
             'label' => 'Код',
         ]);
         $this->crud->addField([
-            'name' => 'group',
-            'label' => 'Группа',
-        ]);
-        $this->crud->addField([
             'name' => 'student_status',
             'label' => 'Статус',
             'type' => 'select',
@@ -217,5 +213,19 @@ class StudentCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function destroy($id)
+    {
+        $this->crud->hasAccessOrFail('delete');
+
+        // get entry ID from Request (makes sure its the last ID for nested resources)
+        $id = $this->crud->getCurrentEntryId() ?? $id;
+
+        $student = \App\Models\Student::find($id);
+        $student->user->role_id = null;
+        $student->user->save();
+
+        return $this->crud->delete($id);
     }
 }

@@ -30,7 +30,13 @@ class Specialty extends Model
         'id' => 'integer',
     ];
 
-    public function groups() {
+    public function groups()
+    {
         return $this->hasMany(Group::class);
+    }
+
+    public function subjects()
+    {
+        return $this->hasMany(Subject::class);
     }
 }

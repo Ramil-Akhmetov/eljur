@@ -46,6 +46,7 @@ trait TransferStudentOperation
         );
 
         $this->crud->operation('transferStudent', function () {
+            $this->crud->setSubheading('Перевести студента');
             $this->crud->addField([
                 'name' => 'group',
                 'label' => 'Группа',

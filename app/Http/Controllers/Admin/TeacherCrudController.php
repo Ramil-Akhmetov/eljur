@@ -14,7 +14,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class TeacherCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+//    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -28,7 +28,7 @@ class TeacherCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Teacher::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/teacher');
-        CRUD::setEntityNameStrings('teacher', 'teachers');
+        CRUD::setEntityNameStrings('преподаватель', 'преподаватели');
     }
 
     protected function setupShowOperation()
@@ -139,7 +139,7 @@ class TeacherCrudController extends CrudController
         ]);
         CRUD::addColumn([
             'name' => 'user.birthdate',
-            'label' => 'День рождения',
+            'label' => 'Дата рождения',
             'type' => 'date',
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
@@ -155,7 +155,7 @@ class TeacherCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'subjects',
-            'label' => 'Предметы',
+            'label' => 'Дисциплины',
             'type' => 'select_multiple',
         ]);
     }
@@ -174,16 +174,20 @@ class TeacherCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'subjects',
+            'label' => 'Дисциплины',
             'type' => 'select_multiple',
-            // optional
             'entity' => 'subjects', // the method that defines the relationship in your Model
             'model' => "App\Models\Subject", // foreign key model
-            'attribute' => 'name',
+            'attribute' => 'full_name_with_specialty',
             'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
 
-            // also optional
             'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
+                return $query->join('specialties', 'subjects.specialty_id', '=', 'specialties.id')
+                    ->select('subjects.*') // make sure to select subjects.* to avoid overriding subject attributes
+                    ->with('specialty')
+                    ->orderBy('specialties.code', 'ASC')
+                    ->orderBy('subjects.name', 'ASC')
+                    ->get();
             }), // force the related options to be a custom query, instead of all(); y
         ]);
 
@@ -202,5 +206,19 @@ class TeacherCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function destroy($id)
+    {
+        $this->crud->hasAccessOrFail('delete');
+
+        // get entry ID from Request (makes sure its the last ID for nested resources)
+        $id = $this->crud->getCurrentEntryId() ?? $id;
+
+        $teacher = \App\Models\Teacher::find($id);
+        $teacher->user->role_id = null;
+        $teacher->user->save();
+
+        return $this->crud->delete($id);
     }
 }

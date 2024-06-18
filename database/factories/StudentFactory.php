@@ -24,7 +24,7 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => $this->faker->unique()->lexify('????'),
+            'code' => $this->faker->unique()->bothify('####'),
             'user_id' => User::all()->random()->id,
             'group_id' => Group::all()->random()->id,
             'student_status_id' => 1,

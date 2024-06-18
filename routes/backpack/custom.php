@@ -31,9 +31,31 @@ Route::group([
     Route::crud('attendance-option', 'AttendanceOptionCrudController');
     Route::crud('subject', 'SubjectCrudController');
     Route::crud('invite-code', 'InviteCodeCrudController');
+    Route::crud('topic', 'TopicCrudController');
+    Route::crud('teacher-group-subject', \App\Http\Controllers\Admin\TeacherGroupSubjectCrudController::class);
 
 
-    Route::get('/eljur', [EljurController::class, 'showCreateEljur'])->name('eljur.create');
-    Route::get('/eljur/subjects/{groupId}', [EljurController::class, 'getSubjects']);
-    Route::get('/eljur/journal/{groupId}/{subjectId}', [EljurController::class, 'getJournalData']);
+    Route::get('/eljur/student', [EljurController::class, 'showEljurStudent'])->name('eljur.student');
+    Route::get('/eljur', [EljurController::class, 'showCreateEljur'])->name('eljur');
+
+    Route::post('/eljur', [EljurController::class, 'saveEljur'])->name('eljur');
+    Route::post('/eljur/add', [EljurController::class, 'eljurAdd'])->name('eljur.add');
+
+    Route::get('/report-group-month', [EljurController::class, 'showReportGroupMonth'])->name('report.group.month');
+    Route::get('/report-group-semester', [EljurController::class, 'showReportGroupSemester'])->name('report.group.semester');
+    Route::post('/report-group-semester', [EljurController::class, 'saveReportGroupSemester'])->name('report.group.semester');
+
+//    Route::get('/eljur/template', [EljurController::class, 'template']);
 });
+
+Route::group([], function() {
+//    Route::crud('teacher-group-subject', 'TeacherGroupSubjectCrudController');
+});
+
+
+/*
+ * Журнал преподавателя
+ * Журнал студента (такой же как и у преподавателя, но без возможности редактирования)
+ *
+ * Ведомость ежемесячная
+ * */
