@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Group;
+use App\Models\TeacherGroupSubject;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class TeacherGroupSubjectRequest extends FormRequest
 {
@@ -53,4 +56,21 @@ class TeacherGroupSubjectRequest extends FormRequest
             //
         ];
     }
-}
+
+
+    public function after(): array
+    {
+        return [
+            function (Validator $validator) {
+                $input = request()->all();
+                $group_id = $input['group'];
+                $teacherSubject_id = $input['teacherSubject'];
+                if (TeacherGroupSubject::where('group_id', $group_id)->where('teacher_subject_id', $teacherSubject_id)->exists()) {
+                    $validator->errors()->add(
+                        '',
+                        'Преподаватель уже привязан к этой группе.'
+                    );
+                }
+            }
+        ];
+    }}

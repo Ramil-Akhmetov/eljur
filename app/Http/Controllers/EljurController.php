@@ -116,7 +116,6 @@ class EljurController extends Controller
             $end_date = date('Y-m-t');
         }
 
-        //lesson's date must be between start_date and end_date
         $lessons = Lesson::where('group_id', $group->id)
             ->where('subject_id', $selected_subject_id)
             ->where('date', '>=', $start_date)
@@ -143,7 +142,7 @@ class EljurController extends Controller
     public function saveEljur(Request $request)
     {
         $input = $request->all();
-//        \dd($input);
+
         foreach ($input['attendances'] as $i => $attendance_option) {
             $str = \explode('|', $i);
             $student_id = $str[0];
@@ -187,6 +186,8 @@ class EljurController extends Controller
             }
         }
 
+        \Alert::add('success', 'Данные успешно сохранены');
+
         return redirect()->route('eljur', [
             'group_id' => $input['group_id'],
             'subject_id' => $input['subject_id'],
@@ -213,8 +214,6 @@ class EljurController extends Controller
             return view('error', ['error_number' => 403, 'title' => 'У вас нет доступа к этой странице']);
         }
 
-        //db trasaction
-
         DB::transaction(function () use ($input) {
             $subject = Subject::find($input['subject_id']);
             $group = Group::find($input['group_id']);
@@ -232,6 +231,8 @@ class EljurController extends Controller
             }
         });
 
+        \Alert::add('success', 'Занятие успешно добавлено');
+
         return redirect()->route('eljur', [
             'group_id' => $input['group_id'],
             'subject_id' => $input['subject_id'],
@@ -240,56 +241,10 @@ class EljurController extends Controller
         ]);
     }
 
-    public function showCreateMonthReport(Request $request)
-    {
-        $user = backpack_user();
-        if ($user->role->name !== 'Администратор' && $user->role->name !== 'Преподаватель') {
-            return view('error', ['error_number' => 403, 'title' => 'У вас нет доступа к этой странице']);
-        }
-
-        if ($user->role->name === 'Администратор') {
-            $groups = Group::all();
-        } else {
-            $groups = $user->teacher->groups;
-        }
-
-        if ($user->role->name === 'Администратор') {
-            $subjects = Subject::all();
-        } else {
-            $subjects = $user->teacher->subjects;
-        }
-
-        $group_id = $request->query('group_id');
-        $selected_group_id = null;
-        if ($group_id) {
-            $selected_group_id = Group::find($group_id)->id;
-        }
-
-        $students = null;
-
-        if ($selected_group_id) {
-            $group = Group::find($selected_group_id);
-            $students = $group->students;
-        }
-
-
-        $active_subjects = Group::find($selected_group_id)->specialty()->subjects()->where('is_active', 1)->get();
-
-        return view('eljur_group_month_report', [
-            'groups' => $groups,
-            'group_id' => $selected_group_id,
-
-            'students' => $students,
-            'lessons' => $lessons,
-        ]);
-    }
 
     public function showReportGroupMonth(Request $request)
     {
         $user = backpack_user();
-//            if ($user->role->name !== 'Администратор' && $user->role->name !== 'Преподаватель') {
-//                return view('error', ['error_number' => 403, 'title' => 'У вас нет доступа к этой странице']);
-//            }
 
         $group_id = $request->query('group_id') ?? null;
         $semester_id = $request->query('semester_id') ?? null;
@@ -329,9 +284,6 @@ class EljurController extends Controller
     public function showReportGroupSemester(Request $request)
     {
         $user = backpack_user();
-//            if ($user->role->name !== 'Администратор' && $user->role->name !== 'Преподаватель') {
-//                return view('error', ['error_number' => 403, 'title' => 'У вас нет доступа к этой странице']);
-//            }
 
         $group_id = $request->query('group_id') ?? null;
         $semester_id = $request->query('semester_id') ?? null;
@@ -347,7 +299,15 @@ class EljurController extends Controller
         $students = null;
         $subjects = null;
         if ($group_id) {
-            $subjects = TeacherGroupSubject::where('group_id', $group_id)->get()->map(function ($item) {
+            $subjects = TeacherGroupSubject::where('group_id', $group_id)
+                ->whereHas('teacherSubject', function ($query) use ($semester_id) {
+                    $query->whereHas('subject', function ($query) use ($semester_id) {
+                        $query->whereHas('semesters', function ($query) use ($semester_id) {
+                            $query->where('semester_id', $semester_id);
+                        });
+                    });
+                })
+                ->get()->map(function ($item) {
                 return $item->subject;
             })->unique('id');
 
@@ -374,7 +334,6 @@ class EljurController extends Controller
     public function saveReportGroupSemester(Request $request)
     {
         $input = $request->all();
-//        \dd($input);
 
         foreach ($input['grades'] as $i => $attendance_option) {
             $str = \explode('|', $i);
@@ -397,6 +356,8 @@ class EljurController extends Controller
                 ]);
             }
         }
+
+        \Alert::add('success', 'Данные успешно сохранены');
 
         return redirect()->route('report.group.semester', [
             'group_id' => $input['group_id'],

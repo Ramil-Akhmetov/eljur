@@ -72,12 +72,6 @@ class SubjectCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name' => 'hoursleft',
-            'label' => 'Количество часов',
-            'attribute' => 'hoursleft',
-        ]);
-
-        CRUD::addColumn([
             'name' => 'semesters',
             'label' => 'Семестры',
             'type' => 'select_multiple',
@@ -89,6 +83,22 @@ class SubjectCrudController extends CrudController
             'label' => 'Преподаватели',
             'type' => 'select_multiple',
             'attribute' => 'full_name',
+
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('teachers', function ($q) use ($column, $searchTerm) {
+                    $q->whereHas('user', function ($q) use ($column, $searchTerm) {
+                        $q->where('surname', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('name', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('patronymic', 'like', '%' . $searchTerm . '%');
+                    });
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('teachers', 'teachers.id', '=', 'groups.teacher_id')
+                    ->leftJoin('users', 'users.id', '=', 'teachers.user_id')
+                    ->orderBy('users.surname', $columnDirection)->select('groups.*');
+            }
         ]);
     }
 

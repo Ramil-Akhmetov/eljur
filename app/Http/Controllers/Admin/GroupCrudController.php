@@ -27,10 +27,15 @@ class GroupCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->role_id != 1){
+            CRUD::denyAccess(['create','update','delete', 'transferStudent']);
+        }
+
         CRUD::setModel(\App\Models\Group::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/group');
         CRUD::setEntityNameStrings('группу', 'группы');
     }
+
     protected function setupShowOperation()
     {
         $this->setupListOperation();
@@ -57,6 +62,11 @@ class GroupCrudController extends CrudController
                 $query->orWhereHas('specialty', function ($q) use ($column, $searchTerm) {
                     $q->where('name', 'like', '%' . $searchTerm . '%');
                 });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('specialties', 'specialties.id', '=', 'groups.specialty_id')
+                    ->orderBy('specialties.name', $columnDirection)->select('groups.*');
             }
         ]);
 
@@ -64,6 +74,21 @@ class GroupCrudController extends CrudController
             'name' => 'teacher',
             'label' => 'Классный руководитель',
             'attribute' => 'full_name',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('teacher', function ($q) use ($column, $searchTerm) {
+                    $q->whereHas('user', function ($q) use ($column, $searchTerm) {
+                        $q->where('surname', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('name', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('patronymic', 'like', '%' . $searchTerm . '%');
+                    });
+                });
+            },
+            'orderable' => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->leftJoin('teachers', 'teachers.id', '=', 'groups.teacher_id')
+                    ->leftJoin('users', 'users.id', '=', 'teachers.user_id')
+                    ->orderBy('users.surname', $columnDirection)->select('groups.*');
+            }
         ]);
 
         CRUD::addColumn([

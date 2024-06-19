@@ -1,19 +1,10 @@
 @php use App\Models\Attendance; @endphp
 @extends(backpack_view('blank'))
 
-@php
-    $defaultBreadcrumbs = [
-        trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
-        'Электронный журнал преподавателя' => false,
-    ];
-    $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
-@endphp
-
 @section('header')
     <section class="header-operation container-fluid animated fadeIn d-flex mb-2 align-items-baseline d-print-none"
              bp-section="page-header">
         <h1 class="text-capitalize mb-0" bp-section="page-heading">Электронный журнал</h1>
-{{--        <p class="ms-2 ml-2 mb-0" id="datatable_info_stack" bp-section="page-subheading">Оценки студентов</p>--}}
     </section>
 @endsection
 
@@ -160,7 +151,6 @@
                                             $attendance = \App\Models\Attendance::where('student_id', $student->id)
                                                 ->where('lesson_id', $lesson->id)
                                                 ->first();
-//                                            dd(Attendance::where('lesson_id', $lesson->id)->where('student_id', $student->id)->first());
                                         @endphp
                                         <td style="padding: 0; width: 45px;">
                                             <select
@@ -290,5 +280,6 @@
                         </div>
                     </div>
                 </form>
+    </div>
     @endif
 @endsection

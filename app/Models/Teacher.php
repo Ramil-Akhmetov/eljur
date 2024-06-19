@@ -34,6 +34,7 @@ class Teacher extends Model
 
     protected $appends = ['full_name'];
 
+
     public function subjects(): BelongsToMany
     {
         return $this->belongsToMany(Subject::class, 'teacher_subject');
@@ -60,5 +61,10 @@ class Teacher extends Model
             })->get()->map(function ($item) {
                 return $item->teacherSubject->subject;
             })->unique('id');
+    }
+
+    public function teacherSubjects()
+    {
+        return $this->hasMany(TeacherSubject::class);
     }
 }

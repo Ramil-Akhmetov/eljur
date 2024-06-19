@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Schema;
 
 class TeacherSubject extends Model
 {
@@ -48,5 +49,17 @@ class TeacherSubject extends Model
     public function getFullNameAttribute(): string
     {
         return $this->teacher->fullname. ' - ' . $this->subject->name;
+    }
+    public function isColumnNullable($column)
+    {
+        $table = $this->getTable();
+        $connection = Schema::getConnection()->getDoctrineSchemaManager();
+        $columns = $connection->listTableColumns($table);
+
+        if (array_key_exists($column, $columns)) {
+            return !$columns[$column]->getNotnull();
+        }
+
+        return false;
     }
 }

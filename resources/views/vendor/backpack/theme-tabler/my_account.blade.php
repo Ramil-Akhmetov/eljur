@@ -9,17 +9,10 @@
     </style>
 @endsection
 
-@php
-  $breadcrumbs = [
-      trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
-      trans('backpack::base.my_account') => false,
-  ];
-@endphp
-
 @section('header')
     <section class="content-header">
         <div class="container-fluid mb-3">
-            <h1>{{ trans('backpack::base.my_account') }}</h1>
+            <h1>{{backpack_user()->role->name}} - {{ backpack_user()->surname }} {{ backpack_user()->name }} {{ backpack_user()->patronymic }}</h1>
         </div>
     </section>
 @endsection
@@ -61,15 +54,6 @@
 
                     <div class="card-body backpack-profile-form bold-labels">
                         <div class="row">
-{{--                            <div class="col-md-6 form-group">--}}
-{{--                                @php--}}
-{{--                                    $label = trans('backpack::base.name');--}}
-{{--                                    $field = 'name';--}}
-{{--                                @endphp--}}
-{{--                                <label class="required">{{ $label }}</label>--}}
-{{--                                <input required class="form-control" type="text" name="{{ $field }}" value="{{ old($field) ? old($field) : $user->$field }}">--}}
-{{--                            </div>--}}
-
                             <div class="col-md-6 form-group">
                                 @php
                                     $label = trans('backpack::base.'.strtolower(config('backpack.base.authentication_column_name')));

@@ -75,7 +75,6 @@ class TeacherGroupSubjectCrudController extends CrudController
             'attribute' => 'full_name',
             'type' => 'select',
         ]);
-
         CRUD::addField([
             'name' => 'group',
             'label' => 'Группа',

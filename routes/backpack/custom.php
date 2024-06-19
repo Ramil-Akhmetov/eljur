@@ -31,7 +31,6 @@ Route::group([
     Route::crud('attendance-option', 'AttendanceOptionCrudController');
     Route::crud('subject', 'SubjectCrudController');
     Route::crud('invite-code', 'InviteCodeCrudController');
-    Route::crud('topic', 'TopicCrudController');
     Route::crud('teacher-group-subject', \App\Http\Controllers\Admin\TeacherGroupSubjectCrudController::class);
 
 
@@ -45,17 +44,8 @@ Route::group([
     Route::get('/report-group-semester', [EljurController::class, 'showReportGroupSemester'])->name('report.group.semester');
     Route::post('/report-group-semester', [EljurController::class, 'saveReportGroupSemester'])->name('report.group.semester');
 
-//    Route::get('/eljur/template', [EljurController::class, 'template']);
 });
 
 Route::group([], function() {
-//    Route::crud('teacher-group-subject', 'TeacherGroupSubjectCrudController');
+
 });
-
-
-/*
- * Журнал преподавателя
- * Журнал студента (такой же как и у преподавателя, но без возможности редактирования)
- *
- * Ведомость ежемесячная
- * */

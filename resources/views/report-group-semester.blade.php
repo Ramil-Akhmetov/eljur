@@ -1,19 +1,10 @@
 @php use App\Models\Attendance;use App\Models\GradeMonth;use App\Models\TeacherGroupSubject; @endphp
 @extends(backpack_view('blank'))
 
-@php
-    $defaultBreadcrumbs = [
-        trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
-        'Электронный журнал' => false,
-    ];
-    $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
-@endphp
-
 @section('header')
     <section class="header-operation container-fluid animated fadeIn d-flex mb-2 align-items-baseline d-print-none"
              bp-section="page-header">
-        <h1 class="text-capitalize mb-0" bp-section="page-heading">Электронный журнал</h1>
-        <p class="ms-2 ml-2 mb-0" id="datatable_info_stack" bp-section="page-subheading">Оценки студентов</p>
+        <h1 class="text-capitalize mb-0" bp-section="page-heading">Промежуточная ведомость</h1>
     </section>
 @endsection
 
@@ -107,21 +98,40 @@
                                             ->where('student_id', $student->id)
                                             ->where('semester_id', $semester_id)
                                             ->first();
+
+                                            $teacher = TeacherGroupSubject::where('group_id', $group_id)->get()->map(function ($item) {
+                                                return $item->teacher;
+                                            })->unique('id')->first();
+                                            $ts = null;
+                                            if ($teacher && $subject) {
+                                                $ts = \App\Models\TeacherSubject::where('subject_id', $subject->id)->where('teacher_id', $teacher->id)->first();
+//                                                $canEdit = backpack_user()->role_id == 1 || (backpack_user()->role_id == 2 && $ts);
+$canEdit = false;
+                                                if ($ts) {
+                                                    $tgs = \App\Models\TeacherGroupSubject::where('group_id', $group_id)->where('teacher_subject_id', $ts->id)->first();
+                                                    $canEdit = false;
+                                                }
+
+                                            }
                                         @endphp
-                                        <select
-                                            class="form-select form-select-sm d-flex bg-light rounded-0"
-                                            style="height: 50px; width: 100%; padding: 1rem;"
-                                            name="grades[{{ $student->id }}|{{ $subject->id }}|{{ $semester_grade ? $semester_grade->id : '' }}]"
-                                        >
-                                            @foreach(\App\Models\AttendanceOption::where('type', 'grade')->get() as $option)
-                                                <option
-                                                    value="{{ $option->id }}"
-                                                    {{ ($semester_grade && $option->id == $semester_grade->attendance_option_id) ? 'selected' : '' }}
-                                                >
-                                                    {{ $option->short_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        @if(backpack_user()->role_id == 1 || (backpack_user()->role_id == 2 && $canEdit))
+                                            <select
+                                                class="form-select form-select-sm d-flex bg-light rounded-0"
+                                                style="height: 50px; width: 100%; padding: 1rem;"
+                                                name="grades[{{ $student->id }}|{{ $subject->id }}|{{ $semester_grade ? $semester_grade->id : '' }}]"
+                                            >
+                                                @foreach(\App\Models\AttendanceOption::where('type', 'grade')->get() as $option)
+                                                    <option
+                                                        value="{{ $option->id }}"
+                                                        {{ ($semester_grade && $option->id == $semester_grade->attendance_option_id) ? 'selected' : '' }}
+                                                    >
+                                                        {{ $option->short_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            {{ $semester_grade ? $semester_grade->attendanceOption->short_name : '-' }}
+                                        @endif
                                     </td>
                                 @endforeach
                                 @php
@@ -175,9 +185,11 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary mt-3" type="submit" name="semester_id" value="{{$semester_id}}">Сохранить</button>
-                </div>
+                @if(backpack_user()->role_id == 1 || backpack_user()->role_id == 2)
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary mt-3" type="submit" name="semester_id" value="{{$semester_id}}">Сохранить</button>
+                    </div>
+                @endif
             </form>
     @endif
 @endsection

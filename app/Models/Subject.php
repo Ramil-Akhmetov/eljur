@@ -57,4 +57,9 @@ class Subject extends Model
     {
         return $this->specialty->code. ' - ' . $this->name;
     }
+
+    public function teacherSubjects()
+    {
+        return $this->hasMany(TeacherSubject::class);
+    }
 }
