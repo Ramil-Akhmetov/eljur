@@ -252,7 +252,9 @@ class UserCrudController extends CrudController
         $id = $this->crud->getCurrentEntryId() ?? $id;
 
         $invite_code = InviteCode::where('user_id', $id)->first();
-        $invite_code->delete();
+        if ($invite_code) {
+            $invite_code->delete();
+        }
 
         return $this->crud->delete($id);
     }
