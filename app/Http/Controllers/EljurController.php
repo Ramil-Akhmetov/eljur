@@ -286,9 +286,9 @@ class EljurController extends Controller
             }
         }
 
-        if ($user->role->name === 'Администратор') {
-            $groups = Group::where('group_status_id', 1)->get();
-        } else if ($user->role->name === 'Преподаватель') {
+
+        $groups = Group::where('group_status_id', 1)->get();
+        if ($user->role->name === 'Преподаватель') {
             $teacherId = $user->teacher->id;
             $groups = TeacherGroupSubject::whereHas('teacherSubject', function ($query) use ($teacherId) {
                 $query->where('teacher_id', $teacherId);
@@ -353,9 +353,8 @@ class EljurController extends Controller
                 ->get();
         }
 
-        if ($user->role->name === 'Администратор') {
-            $groups = Group::where('group_status_id', 1)->get();
-        } else if ($user->role->name === 'Преподаватель') {
+        $groups = Group::where('group_status_id', 1)->get();
+        if ($user->role->name === 'Преподаватель') {
             $teacherId = $user->teacher->id;
             $groups = TeacherGroupSubject::whereHas('teacherSubject', function ($query) use ($teacherId) {
                 $query->where('teacher_id', $teacherId);
