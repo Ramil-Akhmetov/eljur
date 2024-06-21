@@ -178,7 +178,7 @@ class TeacherCrudController extends CrudController
             'type' => 'select_multiple',
             'entity' => 'subjects', // the method that defines the relationship in your Model
             'model' => "App\Models\Subject", // foreign key model
-            'attribute' => 'full_name_with_specialty',
+            'attribute' => 'full_name',
             'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
 
             'options' => (function ($query) {
