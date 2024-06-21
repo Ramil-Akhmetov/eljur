@@ -252,7 +252,6 @@ class EljurController extends Controller
         $user = backpack_user();
 
         $group_id = $request->query('group_id') ?? null;
-        $semester_id = $request->query('semester_id') ?? null;
         $month = $request->query('month') ?? \date('Y-m');
 
         if ($user->role->name == 'Студент') {
@@ -287,9 +286,24 @@ class EljurController extends Controller
             }
         }
 
+        if ($user->role->name === 'Администратор') {
+            $groups = Group::where('group_status_id', 1)->get();
+        } else if ($user->role->name === 'Преподаватель') {
+            $teacherId = $user->teacher->id;
+            $groups = TeacherGroupSubject::whereHas('teacherSubject', function ($query) use ($teacherId) {
+                $query->where('teacher_id', $teacherId);
+            })
+                ->whereHas('group', function ($query) {
+                    $query->where('group_status_id', 1);
+                })
+                ->get()->map(function ($item) {
+                    return $item->group;
+                })->unique('id');
+        }
+
         return view('report-group-month', [
             'group_id' => $group_id,
-            'groups' => Group::where('group_status_id', 1)->get(),
+            'groups' => $groups,
             'month' => $month,
 
             'subjects' => $subjects,
@@ -339,9 +353,23 @@ class EljurController extends Controller
                 ->get();
         }
 
+        if ($user->role->name === 'Администратор') {
+            $groups = Group::where('group_status_id', 1)->get();
+        } else if ($user->role->name === 'Преподаватель') {
+            $teacherId = $user->teacher->id;
+            $groups = TeacherGroupSubject::whereHas('teacherSubject', function ($query) use ($teacherId) {
+                $query->where('teacher_id', $teacherId);
+            })
+                ->whereHas('group', function ($query) {
+                    $query->where('group_status_id', 1);
+                })
+                ->get()->map(function ($item) {
+                    return $item->group;
+                })->unique('id');
+        }
         return view('report-group-semester', [
             'group_id' => $group_id,
-            'groups' => Group::where('group_status_id', 1)->get(),
+            'groups' => $groups,
             'semester_id' => $semester_id,
 
             'subjects' => $subjects,
