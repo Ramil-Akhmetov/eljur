@@ -118,10 +118,12 @@ $canSave = false;
                                             if ($teacher && $subject) {
                                                 $ts = \App\Models\TeacherSubject::where('subject_id', $subject->id)->where('teacher_id', $teacher->id)->first();
 //                                                $canEdit = backpack_user()->role_id == 1 || (backpack_user()->role_id == 2 && $ts);
-$canEdit = false;
+                                                    $canEdit = false;
                                                 if ($ts) {
                                                     $tgs = \App\Models\TeacherGroupSubject::where('group_id', $group_id)->where('teacher_subject_id', $ts->id)->first();
-                                                    $canEdit = false;
+                                                    if ($tgs) {
+                                                        $canEdit = true;
+                                                    }
                                                 }
 
                                             }
