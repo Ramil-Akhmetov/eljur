@@ -26,10 +26,6 @@ class TeacherCrudController extends CrudController
      */
     public function setup()
     {
-        if (!backpack_user()->role_id != 2) {
-            CRUD::denyAccess(['create', 'update', 'delete', 'transferStudent']);
-        }
-
         CRUD::setModel(\App\Models\Teacher::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/teacher');
         CRUD::setEntityNameStrings('преподаватель', 'преподаватели');

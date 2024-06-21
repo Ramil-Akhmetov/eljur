@@ -212,6 +212,10 @@ class UserCrudController extends CrudController
 
         $invite_code = InviteCodeController::generateCode();
         $item->inviteCode()->create(['code' => $invite_code]);
+        if($password) {
+            $item->password = bcrypt($password);
+            $item->save();
+        }
 
         // show a success message
         \Alert::success(trans('backpack::crud.insert_success'))->flash();
@@ -227,6 +231,12 @@ class UserCrudController extends CrudController
         $password = $this->crud->getRequest()->request->get('password');
         if (! $password) {
             $this->crud->getRequest()->request->remove('password');
+        }
+
+        $item = $this->crud->getEntry($this->crud->getCurrentEntryId());
+        if($password) {
+            $item->password = bcrypt($password);
+            $item->save();
         }
 
         $response = $this->traitUpdate();

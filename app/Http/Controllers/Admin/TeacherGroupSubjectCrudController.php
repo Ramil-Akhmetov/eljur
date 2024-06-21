@@ -42,9 +42,18 @@ class TeacherGroupSubjectCrudController extends CrudController
 //        CRUD::setFromDb(); // set columns from db columns.
 
         CRUD::addColumn([
-            'name' => 'teacherSubject',
-            'label' => 'Преподаватель - предмет',
-            'attribute' => 'full_name',
+            'name' => 'teacher',
+            'entity' => 'teacherSubject',
+            'label' => 'Преподаватель',
+            'attribute' => 'teacher_full_name',
+            'orderable' => true,
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'subject',
+            'entity' => 'teacherSubject',
+            'label' => 'Дисциплина',
+            'attribute' => 'item_name',
         ]);
 
         CRUD::addColumn([
@@ -91,5 +100,10 @@ class TeacherGroupSubjectCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
     }
 }

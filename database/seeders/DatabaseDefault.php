@@ -61,7 +61,9 @@ class DatabaseDefault extends Seeder
         GroupStatus::factory()->create(['name' => 'Выпустилась']);
 
         User::factory()->create([
+            'surname' => 'admin',
             'name' => 'admin',
+            'patronymic' => 'admin',
             'email' => 'admin@email.com',
             'role_id' => 1,
         ]);

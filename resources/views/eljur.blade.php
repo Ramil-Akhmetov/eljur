@@ -81,7 +81,7 @@
             }
         </style>
 
-        @if($students && $group_id && $subject_id)
+        @if($students && $group_id && $subject_id && count($lessons))
             <form method="POST">
                 @csrf
                 <div class="table-responsive mt-3" id="journal-table">
@@ -272,8 +272,9 @@
                                class="d-none form-control @error('count') is-invalid @enderror">
                         <input type="number" name="start_date" value="{{$start_date}}"
                                class="d-none form-control @error('count') is-invalid @enderror">
-                        <input type="number" name="end_date" value="{{$end_date}}"
+                        <input type="number" name="end_date" value="{{request('end_date')}}"
                                class="d-none form-control @error('count') is-invalid @enderror">
+
 
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-primary mt-3" type="submit">Создать</button>

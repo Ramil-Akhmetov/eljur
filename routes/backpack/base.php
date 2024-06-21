@@ -55,6 +55,10 @@ Route::group(
             Route::get('dashboard', function() {
                 return redirect()->route('backpack.account.info');
             })->name('backpack.dashboard');
+
+            Route::get('', function() {
+                return redirect()->route('backpack.account.info');
+            })->name('backpack');
         }
 
         // if not otherwise configured, setup the "my account" routes

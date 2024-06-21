@@ -7,6 +7,7 @@ use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Termwind\Components\Dd;
 
 class Group extends Model
 {
@@ -23,6 +24,7 @@ class Group extends Model
         'specialty_id',
         'teacher_id',
         'start_date',
+        'semester_id',
         'group_status_id',
     ];
 
@@ -69,7 +71,7 @@ class Group extends Model
         return $this->belongsTo(GroupStatus::class);
     }
 
-    protected $appends = ['current_semester'];
+    protected $appends = ['current_semester', 'semester_by_month'];
 
 //    public function getCurrentSemesterAttribute()
 //    {
@@ -96,6 +98,27 @@ class Group extends Model
     public function getCurrentSemesterAttribute()
     {
         $startDate = new DateTime($this->date);
+        $secondSemesterStart = new DateTime(date('Y') . '-01-01');
+        $currentDate = new DateTime();
+
+        // Determine if the current date is in the second half of the year
+        $isSecondHalf = $currentDate > $secondSemesterStart;
+
+        // Calculate the age difference in years
+        $groupAge = $startDate->diff($currentDate)->y;
+
+        // Calculate the semester number
+        $semesterNumber = 1 + $groupAge * 2 + ($isSecondHalf ? 1 : 0);
+
+        // Fetch the semester or default to semester number 8
+        $semester = Semester::where('number', $semesterNumber)->first();
+
+        return $semester;
+    }
+
+    public function getSemesterByMonth($month)
+    {
+        $startDate = new DateTime($month);
         $secondSemesterStart = new DateTime(date('Y') . '-01-01');
         $currentDate = new DateTime();
 

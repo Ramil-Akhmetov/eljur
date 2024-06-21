@@ -43,6 +43,7 @@ class RegisterController extends BackpackRegisterController
         $invite_code = InviteCode::where('code', $data['code'])->first();
         $user = User::find($invite_code->user_id);
         $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
         $user->save();
         $invite_code->delete();
 

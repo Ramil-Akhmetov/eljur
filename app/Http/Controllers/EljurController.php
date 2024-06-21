@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\AttendanceOption;
 use App\Models\GradeMonth;
 use App\Models\GradeSemester;
+use App\Models\Semester;
 use App\Models\Student;
 use App\Models\TeacherGroupSubject;
 use Illuminate\Http\Request;
@@ -35,13 +36,16 @@ class EljurController extends Controller
         $groups = null;
 
         if ($user->role->name === 'Администратор') {
-            $groups = Group::all();
+            $groups = Group::where('group_status_id', 1)->get();
         } else if ($user->role->name === 'Преподаватель') {
             $teacherId = $user->teacher->id;
-            $groups = TeacherGroupSubject::
-            whereHas('teacherSubject', function ($query) use ($teacherId, $subject_id) {
+            $groups = TeacherGroupSubject::whereHas('teacherSubject', function ($query) use ($teacherId, $subject_id) {
                 $query->where('teacher_id', $teacherId);
-            })->get()->map(function ($item) {
+            })
+                ->whereHas('group', function ($query) {
+                $query->where('group_status_id', 1);
+            })
+                ->get()->map(function ($item) {
                 return $item->group;
             })->unique('id');
         }
@@ -50,11 +54,11 @@ class EljurController extends Controller
         $students = null;
         $lessons = null;
 
-        $start_date = $request->query('start_date');
+        $start_date = $request->input('start_date');
         if (!$start_date) {
             $start_date = date('Y-m-01');
         }
-        $end_date = $request->query('end_date');
+        $end_date = $request->input('end_date');
         if (!$end_date) {
             $end_date = date('Y-m-t');
         }
@@ -74,6 +78,7 @@ class EljurController extends Controller
                 ->orderBy('users.surname', 'ASC')
                 ->orderBy('users.name', 'ASC')
                 ->orderBy('users.patronymic', 'ASC')
+                ->select('students.*', 'users.surname', 'users.name', 'users.patronymic')
                 ->get();
 
             $lessons = Lesson::where('group_id', $group_id)
@@ -198,6 +203,7 @@ class EljurController extends Controller
 
     public function eljurAdd(Request $request)
     {
+        dd($request->all());
         $input = $request->validate([
             'date' => 'required|date',
             'topic' => 'required|string',
@@ -257,22 +263,34 @@ class EljurController extends Controller
         $students = null;
         $subjects = null;
         if ($group_id) {
-            $subjects = TeacherGroupSubject::where('group_id', $group_id)->get()->map(function ($item) {
-                return $item->subject;
-            })->unique('id');
+            $semesterByMonth = Group::find($group_id)->getSemesterByMonth($month);
+            if ($semesterByMonth) {
+                $subjects = TeacherGroupSubject::where('group_id', $group_id)
+                    ->whereHas('teacherSubject', function ($query) use ($semesterByMonth) {
+                        $query->whereHas('subject', function ($query) use ($semesterByMonth) {
+                            $query->whereHas('semesters', function ($query) use ($semesterByMonth) {
+                                $query->where('semester_id', $semesterByMonth->id);
+                            });
+                        });
+                    })
+                    ->get()->map(function ($item) {
+                        return $item->subject;
+                    })->unique('id');
 
-            $students = Student::query()
-                ->where('group_id', $group_id)
-                ->join('users', 'students.user_id', '=', 'users.id')
-                ->orderBy('users.surname', 'ASC')
-                ->orderBy('users.name', 'ASC')
-                ->orderBy('users.patronymic', 'ASC')
-                ->get();
+                $students = Student::query()
+                    ->where('group_id', $group_id)
+                    ->join('users', 'students.user_id', '=', 'users.id')
+                    ->orderBy('users.surname', 'ASC')
+                    ->orderBy('users.name', 'ASC')
+                    ->orderBy('users.patronymic', 'ASC')
+                    ->select('students.*', 'users.surname', 'users.name', 'users.patronymic')
+                    ->get();
+            }
         }
 
         return view('report-group-month', [
             'group_id' => $group_id,
-            'groups' => Group::all(),
+            'groups' => Group::where('group_status_id', 1)->get(),
             'month' => $month,
 
             'subjects' => $subjects,
@@ -288,12 +306,13 @@ class EljurController extends Controller
         $group_id = $request->query('group_id') ?? null;
         $semester_id = $request->query('semester_id') ?? null;
 
-        if ($group_id && !$semester_id) {
-            $semester_id = Group::find($group_id)->semester->id;
-        }
 
         if ($user->role->name == 'Студент') {
             $group_id = $user->student->group_id;
+        }
+
+        if ($group_id && !$semester_id) {
+            $semester_id = Group::find($group_id)->semester->id;
         }
 
         $students = null;
@@ -317,12 +336,13 @@ class EljurController extends Controller
                 ->orderBy('users.surname', 'ASC')
                 ->orderBy('users.name', 'ASC')
                 ->orderBy('users.patronymic', 'ASC')
+                ->select('students.*', 'users.surname', 'users.name', 'users.patronymic')
                 ->get();
         }
 
         return view('report-group-semester', [
             'group_id' => $group_id,
-            'groups' => Group::all(),
+            'groups' => Group::where('group_status_id', 1)->get(),
             'semester_id' => $semester_id,
 
             'subjects' => $subjects,

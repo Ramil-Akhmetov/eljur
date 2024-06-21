@@ -17,6 +17,9 @@
         table > thead > tr > th {
             vertical-align: middle;
         }
+        td {
+            vertical-align: middle;
+        }
     </style>
     <div class="container">
 
@@ -92,7 +95,6 @@
                                             $dateTime = DateTime::createFromFormat('Y-m', $month);
                                             $month_grad = GradeMonth::where('student_id', $student->id)
                                             ->where('subject_id', $subject->id)
-                                            ->where('student_id', $student->id)
                                             ->whereYear('date', $dateTime->format('Y'))
                                             ->whereMonth('date', $dateTime->format('m'))
                                             ->first();

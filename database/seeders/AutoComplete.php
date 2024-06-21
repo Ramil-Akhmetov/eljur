@@ -16,78 +16,117 @@ use App\Models\Subject;
 use App\Models\TeacherGroupSubject;
 use App\Models\TeacherSubject;
 use App\Models\User;
+use Database\Factories\ClassroomFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class First extends Seeder
+class AutoComplete extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        // Seeding
-        Classroom::factory(10)->create();
+        Classroom::factory(15)->create();
+        $specialties = Specialty::factory(5)->create();
 
-        for ($k = 0; $k < 3; $k++) {
-            $s = Specialty::factory()->create();
-
-            for ($j = 0; $j < 10; $j++) {
-                $subject = Subject::factory()->create([
-                    'specialty_id' => $s->id,
-                ]);
+        foreach ($specialties as $specialty) {
+            $subjects = Subject::factory(10)->create([
+                'specialty_id' => $specialty->id,
+            ]);
+            foreach ($subjects as $subject) {
                 $semester_array = Semester::all()->random(\rand(1, 2));
                 $subject->semesters()->sync($semester_array);
             }
         }
 
-        $teacherUsers = User::factory(5)->create([
-            'role_id' => 2,
-        ]);
-        $teacherUsers->each(function ($user) {
-            $teacher = $user->teacher()->create();
-            $teacher->subjects()->sync(Subject::all()->random(3));
-        });
+        $groups = Group::factory(15)->create();
 
-        $groups = Group::factory(6)->create();
-        $groups->each(function ($group) {
-            $studentUsers = User::factory(5)->create([
-                'role_id' => 3,
-            ]);
-            $studentUsers->each(function ($user) use ($group) {
-                $student = Student::factory()->create(['user_id' => $user->id, 'group_id' => $group->id]);
-            });
-        });
-
-//        TeacherSubject::factory(10)->create();
-
-        $teacherUsers->each(function ($user) {
-            $teacher = $user->teacher;
-
+        foreach ($groups as $group) {
             for ($i = 0; $i < 3; $i++) {
-                $subject = Subject::all()->random();
+                $studentUser = User::factory()->create([
+                    'role_id' => 3,
+                ]);
+                $student = Student::factory()->create([
+                    'user_id' => $studentUser->id,
+                    'group_id' => $group->id,
+                ]);
+            }
+        }
+
+        for ($k = 0; $k < 10; $k++) {
+            $teacherUsers = User::factory()->create([
+                'role_id' => 2,
+            ]);
+            $teacher = $teacherUsers->teacher()->create();
+
+            for ($i = 0; $i < \rand(1, 3); $i++) {
+                $semester = Semester::all()->random();
+                $subject = Subject::whereHas('semesters', function ($q) use ($semester) {
+                    $q->where('id', $semester->id);
+                })->get()->random();
                 $ts = TeacherSubject::factory()->create([
                     'teacher_id' => $teacher->id,
                     'subject_id' => $subject->id,
                 ]);
 
-                $tgs = TeacherGroupSubject::factory()->create([
-                    'teacher_subject_id' => $ts->id,
-                    'group_id' => Group::all()->random()->id,
-                ]);
+
+                //groups where semester = semester
+                $gs = Group::where('semester_id', $semester->id)->get();
+
+                foreach ($gs as $g) {
+                    $tgs = TeacherGroupSubject::factory()->create([
+                        'teacher_subject_id' => $ts->id,
+                        'group_id' => $g->id,
+                    ]);
+                }
             }
-        });
+        }
 
-//        Lesson::factory(100)->create();
-//        Attendance::factory(300)->create();
+//        $teacherUser1 = User::factory()->create([
+//            'role_id' => 2,
+//        ]);
+//        $teacher1 = $teacherUser1->teacher()->create();
+//        $ts1 = $teacher1->teacherSubjects()->create([
+//            'subject_id' => $subject_1->id,
+//        ]);
+//        $tgs1 = TeacherGroupSubject::factory()->create([
+//            'teacher_subject_id' => $ts1->id,
+//            'group_id' => $group_1->id,
+//        ]);
+//        $ts2 = $teacher1->teacherSubjects()->create([
+//            'subject_id' => $subject_2->id,
+//        ]);
+//        $tgs2 = TeacherGroupSubject::factory()->create([
+//            'teacher_subject_id' => $ts2->id,
+//            'group_id' => $group_2->id,
+//        ]);
 //
-//        GradeMonth::factory(100)->create();
-//        GradeSemester::factory(100)->create();
+//
+//        $teacherUser2 = User::factory()->create([
+//            'role_id' => 2,
+//        ]);
+//        $teacher2 = $teacherUser2->teacher()->create();
+//        $ts1 = $teacher2->teacherSubjects()->create([
+//            'subject_id' => $subject_3->id,
+//        ]);
+//        $tgs1 = TeacherGroupSubject::factory()->create([
+//            'teacher_subject_id' => $ts1->id,
+//            'group_id' => $group_3->id,
+//        ]);
+//        $ts2 = $teacher2->teacherSubjects()->create([
+//            'subject_id' => $subject_4->id,
+//        ]);
+//        $tgs2 = TeacherGroupSubject::factory()->create([
+//            'teacher_subject_id' => $ts2->id,
+//            'group_id' => $group_4->id,
+//        ]);
 
-//        $start_of_month = Date('2023-09-01');
-//        $end_of_month = Date('2024-06-t');
-        $start_of_month = Date('2024-06-01');
+
+        //create lessons for all groups and each subject
+        $start_of_month = Date('2024-05-01');
         $end_of_month = Date('2024-06-t');
+
         foreach ($groups as $group) {
             $students = Student::where('group_id', $group->id)->get();
 
@@ -122,7 +161,7 @@ class First extends Seeder
                             ]);
                         }
                     }
-                    $start = Date('Y-m-d', strtotime($start . ' + 3 days'));
+                    $start = Date('Y-m-d', strtotime($start . ' + 7 days'));
                 }
                 foreach ($students as $student) {
                     $g = GradeMonth::create([
@@ -144,16 +183,5 @@ class First extends Seeder
                 }
             }
         }
-
-        User::factory()->create([
-            'surname' => 'Ахметов',
-            'name' => 'Рамиль',
-            'patronymic' => 'Русланович',
-            'email' => 'ramil@gmail.com',
-            'phone' => '88005553535',
-            'sex' => 'Мужчина',
-            'birthdate' => fake()->date('2004-04-19'),
-            'role_id' => null,
-        ]);
     }
 }

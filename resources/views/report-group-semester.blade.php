@@ -8,6 +8,10 @@
     </section>
 @endsection
 
+@php
+$canSave = false;
+@endphp
+
 @section('content')
     <style>
         table {
@@ -115,6 +119,9 @@ $canEdit = false;
                                             }
                                         @endphp
                                         @if(backpack_user()->role_id == 1 || (backpack_user()->role_id == 2 && $canEdit))
+                                            @php
+                                            $canSave = true;
+                                            @endphp
                                             <select
                                                 class="form-select form-select-sm d-flex bg-light rounded-0"
                                                 style="height: 50px; width: 100%; padding: 1rem;"
@@ -185,7 +192,7 @@ $canEdit = false;
                         </tbody>
                     </table>
                 </div>
-                @if(backpack_user()->role_id == 1 || backpack_user()->role_id == 2)
+                @if(backpack_user()->role_id == 1 || (backpack_user()->role_id == 2 && $canSave))
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-primary mt-3" type="submit" name="semester_id" value="{{$semester_id}}">Сохранить</button>
                     </div>

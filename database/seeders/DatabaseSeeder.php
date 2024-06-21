@@ -35,7 +35,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DatabaseDefault::class,
 //            First::class,
-            Second::class,
+//            Second::class,
+            Complete::class,
+//            AutoComplete::class,
         ]);
 
     }

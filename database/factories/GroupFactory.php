@@ -46,11 +46,12 @@ class GroupFactory extends Factory
             $group_status_id = 3;
         }
 
+
         return [
             'code' => $this->faker->bothify('?##'),
             'semester_id' => $semester->id,
             'specialty_id' => Specialty::all()->random()->id,
-            'teacher_id' => Teacher::all()->random()->id,
+            'teacher_id' => null,
             'start_date' => $startDate->format('Y-m-d'),
             'group_status_id' => $group_status_id,
         ];

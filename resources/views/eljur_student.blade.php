@@ -17,6 +17,19 @@
 @endsection
 
 @section('content')
+    <style>
+        table {
+            text-align: center;
+        }
+
+        table > thead > tr > th {
+            vertical-align: middle;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+    </style>
     <div class="container">
         <form class="container" onchange="this.form.submit()" method="GET">
             <div class="form-group mt-3" id="subject-section">
@@ -25,30 +38,32 @@
                     <option value="">Выберите дисциплину</option>
                     @foreach($subjects as $subject)
                         <option
-                            value="{{ $subject->id }}" {{ $subject->id == request('subject_id') ? 'selected' : '' }}>
+                                value="{{ $subject->id }}" {{ $subject->id == request('subject_id') ? 'selected' : '' }}>
                             {{ $subject->name }}
                         </option>
                     @endforeach
                 </select>
             </div>
 
-            <div class="mt-3">
-                <div class="d-flex justify-content-between">
-                    <label>Период:</label>
-                    <div class="d-flex gap-2">
-                        <div>
-                            <label for="start_date">Начало:</label>
-                            <input class="form-control" type="date" id="start_date" name="start_date"
-                                   value="{{ $start_date }}" onchange="this.form.submit()">
-                        </div>
-                        <div>
-                            <label for="end_date">Конец:</label>
-                            <input class="form-control" type="date" id="end_date" name="end_date"
-                                   value="{{ $end_date }}" onchange="this.form.submit()">
+            @if($subject_id)
+                <div class="mt-3">
+                    <div class="d-flex justify-content-between">
+                        <label>Период:</label>
+                        <div class="d-flex gap-2">
+                            <div>
+                                <label for="start_date">Начало:</label>
+                                <input class="form-control" type="date" id="start_date" name="start_date"
+                                       value="{{ $start_date }}" onchange="this.form.submit()">
+                            </div>
+                            <div>
+                                <label for="end_date">Конец:</label>
+                                <input class="form-control" type="date" id="end_date" name="end_date"
+                                       value="{{ $end_date }}" onchange="this.form.submit()">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
         </form>
 
         @if($subject_id && count($lessons) > 0)
@@ -56,9 +71,6 @@
                 @csrf
                 <table class="table table-bordered">
                     <thead>
-                    <tr>
-                        <th colspan="4">1 семестр</th>
-                    </tr>
                     <tr>
                         @php
                             $lessonsByMonth = $lessons->groupBy(function($lesson) {

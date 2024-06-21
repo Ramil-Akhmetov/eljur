@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -32,4 +33,33 @@ class Semester extends Model
     {
         return $this->belongsToMany(Subject::class, 'subject_semester');
     }
+
+
+//    static public function getSemesterByMonth($month) // month date('Y-m')
+//    {
+//        $firstHalfStart = \date('Y') . '-09-01';
+//        $firstHalfEnd = \date('Y') . '-01-31';
+//        $secondHalfStart = \date('Y') . '-01-01';
+//        $secondHalfEnd = \date('Y') . '-06-30';
+//
+//        $isFirstHalf = $month >= $firstHalfEnd && $month <= $firstHalfStart;
+//        $isSecondHalf = $month >= $secondHalfEnd && $month <= $secondHalfStart;
+//
+//
+//
+//
+//
+//    }
+//    static public function getSemesterByMonth($month) // month date('Y-m')
+//    {
+//        $firstHalfStart = \date('Y') . '-09-01';
+//        $firstHalfEnd = \date('Y') . '-01-31';
+//        $secondHalfStart = \date('Y') . '-01-01';
+//        $secondHalfEnd = \date('Y') . '-06-30';
+//
+//        $semesterNumber = ;
+//        $semester = Semester::where('number', $semesterNumber)->first();
+//
+//        return $semester;
+//    }
 }

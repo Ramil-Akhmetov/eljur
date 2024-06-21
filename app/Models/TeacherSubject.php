@@ -44,12 +44,23 @@ class TeacherSubject extends Model
         return $this->belongsTo(Teacher::class);
     }
 
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name', 'teacher_full_name', 'item_name'];
 
     public function getFullNameAttribute(): string
     {
         return $this->teacher->fullname. ' - ' . $this->subject->name;
     }
+
+    public function getTeacherFullNameAttribute(): string
+    {
+        return $this->teacher->fullname;
+    }
+
+    public function getItemNameAttribute(): string
+    {
+        return $this->subject->name;
+    }
+
     public function isColumnNullable($column)
     {
         $table = $this->getTable();

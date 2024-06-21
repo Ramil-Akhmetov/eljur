@@ -77,9 +77,9 @@
                             <td>{{$i + 1}}</td>
                             <td>{{$student->code}}</td>
                             <td>{{$student->user->surname}} {{$student->user->name}} {{$student->user->patronymic}}</td>
-                            @foreach()
+{{--                            @foreach()--}}
 
-                            @endforeach
+{{--                            @endforeach--}}
 
 
                             <td style="padding: 0; width: 45px">
