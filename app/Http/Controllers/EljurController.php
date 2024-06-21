@@ -203,7 +203,6 @@ class EljurController extends Controller
 
     public function eljurAdd(Request $request)
     {
-        dd($request->all());
         $input = $request->validate([
             'date' => 'required|date',
             'topic' => 'required|string',
