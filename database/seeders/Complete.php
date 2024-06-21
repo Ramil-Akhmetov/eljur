@@ -36,40 +36,60 @@ class Complete extends Seeder
         ]);
 
 
-        $subject_1 = Subject::factory()->create([
+        $spec_1_subject_1 = Subject::factory()->create([
             'name' => 'Основы программирования',
             'specialty_id' => $specialty_1->id,
         ]);
-        $subject_1->semesters()->sync([1, 2]);
-        $subject_2 = Subject::factory()->create([
+        $spec_1_subject_1->semesters()->sync([1, 2]);
+        $spec_1_subject_2 = Subject::factory()->create([
             'name' => 'Веб-программирование',
             'specialty_id' => $specialty_1->id,
         ]);
-        $subject_2->semesters()->sync([3, 4]);
+        $spec_1_subject_2->semesters()->sync([3, 4]);
+        $spec_1_subject_3 = Subject::factory()->create([
+            'name' => 'Создание мобильных приложений',
+            'specialty_id' => $specialty_1->id,
+        ]);
+        $spec_1_subject_3->semesters()->sync([4]);
+        $spec_1_subject_4 = Subject::factory()->create([
+            'name' => 'Базы данных',
+            'specialty_id' => $specialty_1->id,
+        ]);
+        $spec_1_subject_4->semesters()->sync([2]);
 
 
-        $subject_3 = Subject::factory()->create([
+        $spec_2_subject_1 = Subject::factory()->create([
             'name' => 'Основы монтажа',
             'specialty_id' => $specialty_2->id,
         ]);
-        $subject_3->semesters()->sync([1, 2]);
-        $subject_4 = Subject::factory()->create([
+        $spec_2_subject_1->semesters()->sync([1, 2]);
+        $spec_2_subject_2 = Subject::factory()->create([
             'name' => 'Электроника',
             'specialty_id' => $specialty_2->id,
         ]);
-        $subject_4->semesters()->sync([3, 4]);
+        $spec_2_subject_2->semesters()->sync([3, 4]);
+        $spec_2_subject_3 = Subject::factory()->create([
+            'name' => 'Электротехника',
+            'specialty_id' => $specialty_2->id,
+        ]);
+        $spec_2_subject_3->semesters()->sync([4]);
+        $spec_2_subject_4 = Subject::factory()->create([
+            'name' => 'Автоматика',
+            'specialty_id' => $specialty_2->id,
+        ]);
+        $spec_2_subject_4->semesters()->sync([2]);
 
 
-        $subject_5 = Subject::factory()->create([
+        $spec_1_subject_5 = Subject::factory()->create([
             'name' => 'Высшая математика',
             'specialty_id' => $specialty_1->id,
         ]);
-        $subject_5->semesters()->sync([2, 3, 4]);
-        $subject_6 = Subject::factory()->create([
+        $spec_1_subject_5->semesters()->sync([2, 3, 4]);
+        $spec_2_subject_5 = Subject::factory()->create([
             'name' => 'Высшая математика',
             'specialty_id' => $specialty_2->id,
         ]);
-        $subject_6->semesters()->sync([2, 3, 4]);
+        $spec_2_subject_5->semesters()->sync([2, 3, 4]);
 
 
         $group_1 = Group::factory()->create([
@@ -91,14 +111,14 @@ class Complete extends Seeder
             'code' => 'c03',
             'specialty_id' => $specialty_2->id,
             'start_date' => '2021-09-01',
-            'semester_id' => 6,
+            'semester_id' => 2,
             'group_status_id' => 1
         ]);
         $group_4 = Group::factory()->create([
             'code' => 'c04',
             'specialty_id' => $specialty_2->id,
             'start_date' => '2020-09-01',
-            'semester_id' => 8,
+            'semester_id' => 4,
             'group_status_id' => 1
         ]);
 
@@ -113,7 +133,7 @@ class Complete extends Seeder
         $groups = [$group_1, $group_2, $group_3, $group_4, $group_5];
 
         foreach ($groups as $group) {
-            for ($i = 0; $i < 3; $i++) {
+            for ($i = 0; $i < 4; $i++) {
                 $studentUser = User::factory()->create([
                     'role_id' => 3,
                 ]);
@@ -129,19 +149,35 @@ class Complete extends Seeder
         ]);
         $teacher1 = $teacherUser1->teacher()->create();
         $ts1 = $teacher1->teacherSubjects()->create([
-            'subject_id' => $subject_1->id,
+            'subject_id' => $spec_1_subject_1->id,
         ]);
         $tgs1 = TeacherGroupSubject::factory()->create([
             'teacher_subject_id' => $ts1->id,
             'group_id' => $group_1->id,
         ]);
         $ts2 = $teacher1->teacherSubjects()->create([
-            'subject_id' => $subject_2->id,
+            'subject_id' => $spec_1_subject_2->id,
         ]);
         $tgs2 = TeacherGroupSubject::factory()->create([
             'teacher_subject_id' => $ts2->id,
             'group_id' => $group_2->id,
         ]);
+        $ts3 = $teacher1->teacherSubjects()->create([
+            'subject_id' => $spec_1_subject_3->id,
+        ]);
+        $tgs3 = TeacherGroupSubject::factory()->create([
+            'teacher_subject_id' => $ts3->id,
+            'group_id' => $group_2->id,
+        ]);
+        $ts4 = $teacher1->teacherSubjects()->create([
+            'subject_id' => $spec_1_subject_4->id,
+        ]);
+        $tgs4 = TeacherGroupSubject::factory()->create([
+            'teacher_subject_id' => $ts4->id,
+            'group_id' => $group_1->id,
+        ]);
+
+
 
 
         $teacherUser2 = User::factory()->create([
@@ -149,23 +185,64 @@ class Complete extends Seeder
         ]);
         $teacher2 = $teacherUser2->teacher()->create();
         $ts1 = $teacher2->teacherSubjects()->create([
-            'subject_id' => $subject_3->id,
+            'subject_id' => $spec_2_subject_1->id,
         ]);
         $tgs1 = TeacherGroupSubject::factory()->create([
             'teacher_subject_id' => $ts1->id,
             'group_id' => $group_3->id,
         ]);
         $ts2 = $teacher2->teacherSubjects()->create([
-            'subject_id' => $subject_4->id,
+            'subject_id' => $spec_2_subject_2->id,
         ]);
         $tgs2 = TeacherGroupSubject::factory()->create([
             'teacher_subject_id' => $ts2->id,
             'group_id' => $group_4->id,
         ]);
+        $ts3 = $teacher2->teacherSubjects()->create([
+            'subject_id' => $spec_2_subject_3->id,
+        ]);
+        $tgs3 = TeacherGroupSubject::factory()->create([
+            'teacher_subject_id' => $ts3->id,
+            'group_id' => $group_4->id,
+        ]);
+        $ts4 = $teacher2->teacherSubjects()->create([
+            'subject_id' => $spec_2_subject_4->id,
+        ]);
+        $tgs4 = TeacherGroupSubject::factory()->create([
+            'teacher_subject_id' => $ts4->id,
+            'group_id' => $group_3->id,
+        ]);
+
+
+
+
+        $ts5 = $teacher1->teacherSubjects()->create([
+            'subject_id' => $spec_2_subject_5->id,
+        ]);
+        $tgs5 = TeacherGroupSubject::factory()->create([
+            'teacher_subject_id' => $ts5->id,
+            'group_id' => $group_3->id,
+        ]);
+        $tgs5 = TeacherGroupSubject::factory()->create([
+            'teacher_subject_id' => $ts5->id,
+            'group_id' => $group_4->id,
+        ]);
+
+        $ts5 = $teacher2->teacherSubjects()->create([
+            'subject_id' => $spec_1_subject_5->id,
+        ]);
+        $tgs5 = TeacherGroupSubject::factory()->create([
+            'teacher_subject_id' => $ts5->id,
+            'group_id' => $group_1->id,
+        ]);
+        $tgs5 = TeacherGroupSubject::factory()->create([
+            'teacher_subject_id' => $ts5->id,
+            'group_id' => $group_2->id,
+        ]);
 
 
         //create lessons for all groups and each subject
-        $start_of_month = Date('2024-06-01');
+        $start_of_month = Date('2024-04-01');
         $end_of_month = Date('2024-06-t');
 
         foreach ($groups as $group) {
@@ -202,7 +279,7 @@ class Complete extends Seeder
                             ]);
                         }
                     }
-                    $start = Date('Y-m-d', strtotime($start . ' + 3 days'));
+                    $start = Date('Y-m-d', strtotime($start . ' + 4 days'));
                 }
                 foreach ($students as $student) {
                     $g = GradeMonth::create([

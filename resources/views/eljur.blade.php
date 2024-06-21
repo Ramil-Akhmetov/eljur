@@ -191,7 +191,7 @@
                                     <td style="padding: 0; width: 45px;">
                                         <select
                                             class="form-select form-select-sm d-flex bg-light rounded-0"
-                                            style="height: 50px; width: 100%; padding: 1rem;"
+                                            style="height: 50px; width: 100%; padding: 1rem"
                                             name="grades[{{ $student->id }}|{{ $lesson->id }}|{{ $monthlyGrade ? $monthlyGrade->id : '' }}]"
                                         >
                                             @foreach(\App\Models\AttendanceOption::where('type', 'grade')->get() as $option)
@@ -217,7 +217,9 @@
             </form>
             @endif
             </form>
-            @if($group_id && $subject_id && backpack_user()->teacher)
+        @php
+        @endphp
+            @if($group_id && $subject_id && backpack_user()->teacher && $subjects->where('id', $subject_id)->first())
                 <form method="POST" action="{{route('eljur.add')}}">
                     @csrf
                     <h3>Создать новую лекцию</h3>

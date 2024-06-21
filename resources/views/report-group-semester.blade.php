@@ -21,6 +21,10 @@ $canSave = false;
         table > thead > tr > th {
             vertical-align: middle;
         }
+
+        td {
+            vertical-align: middle;
+        }
     </style>
     <div class="container">
 

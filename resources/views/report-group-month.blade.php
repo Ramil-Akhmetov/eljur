@@ -71,7 +71,12 @@
                             @foreach($subjects as $subject)
                                 <th colspan="">
                                     @php
-                                        $teacher = TeacherGroupSubject::where('group_id', $group_id)->get()->map(function ($item) {
+
+                                        $teacher = TeacherGroupSubject::where('group_id', $group_id)
+                                        ->whereHas('teacherSubject', function ($query) use ($subject) {
+                                            $query->where('subject_id', $subject->id);
+                                        })
+                                        ->get()->map(function ($item) {
                                             return $item->teacher;
                                         })->unique('id');
                                     @endphp
