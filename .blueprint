@@ -1,0 +1,27 @@
+created:
+    - database/factories/GradeSemesterFactory.php
+    - database/migrations/2024_06_18_013114_create_grade_semesters_table.php
+    - app/Models/GradeSemester.php
+models:
+    Role: { name: 'string unique' }
+    Student: { code: string, user_id: 'id foreign', group_id: 'id foreign', student_status_id: 'id foreign' }
+    Teacher: { user_id: 'id foreign', relationships: { belongsToMany: Subject } }
+    Specialty: { name: 'string unique', code: 'string unique' }
+    Group: { code: string, semester: 'integer default:1', specialty_id: 'id foreign', teacher_id: 'id foreign nullable', start_date: date, group_status_id: 'id foreign' }
+    Classroom: { name: 'string unique', number: 'integer unique' }
+    LessonType: { short_name: 'string unique', name: 'string unique' }
+    AttendanceOption: { short_name: 'string unique', name: 'string unique' }
+    Subject: { specialty_id: 'id foreign', name: string, hours: integer, relationships: { belongsToMany: Teacher } }
+    Lesson: { topic: string, timestamp: timestamp, teacher_id: 'id foreign', group_id: 'id foreign', subject_id: 'id foreign', classroom_id: 'id foreign', lesson_type_id: 'id foreign' }
+    Attendance: { mark: number, attendance_option_id: 'id foreign nullable', student_id: 'id foreign', lesson_id: 'id foreign' }
+    InviteCode: { code: string, user_id: 'id foreign' }
+    StudentStatus: { name: string }
+    GroupStatus: { name: string }
+    Topic: { subject_id: 'id foreign', name: string, hours: integer }
+    TeacherGroupSubject: { subject_teacher_id: 'id foreign', group_id: 'id foreign' }
+    SubjectTeacher: { subject_id: 'id foreign', teacher_id: 'id foreign' }
+    TeacherSubject: { subject_id: 'id foreign', teacher_id: 'id foreign' }
+    Semester: { number: integer, relationships: { belongsToMany: Sbt } }
+    Sbt: { specialty_id: 'id foreign', name: string, hours: integer, relationships: { belongsToMany: Semester } }
+    GradeMonth: { attendance_option_id: 'id foreign', student_id: 'id foreign', subject_id: 'id foreign', date: date }
+    GradeSemester: { attendance_option_id: 'id foreign', student_id: 'id foreign', subject_id: 'id foreign', semester_id: 'id foreign' }

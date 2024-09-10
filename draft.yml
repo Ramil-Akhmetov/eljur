@@ -1,0 +1,127 @@
+models:
+#  Role:
+#    name: string unique
+#
+#  StudentStatus:
+#    name: string
+#
+#  Student:
+#    code: string
+#    user_id: id foreign
+#    group_id: id foreign
+#    student_status_id: id foreign
+#
+#
+#  Specialty:
+#    name: string unique
+#    code: string unique
+#
+#  Group:
+#    code: string
+#    semester: integer default:1
+#    specialty_id: id foreign
+#    teacher_id: id foreign nullable
+#    start_date: date
+#    group_status_id: id foreign
+#
+#  GroupStatus:
+#    name: string
+#
+#  Classroom:
+#    name: string unique
+#    number: integer unique
+#
+#  LessonType:
+#    short_name: string unique
+#    name: string unique
+#
+#  AttendanceOption:
+#    short_name: string unique
+#    name: string unique
+#
+  #  Teacher:
+  #    user_id: id foreign
+  #    relationships:
+  #      belongsToMany: Subject
+
+#  Subject:
+#    specialty_id: id foreign
+#    name: string
+#    hours: integer
+#    relationships:
+#      belongsToMany: Teacher
+#
+#  Lesson:
+#    topic: text
+#    homework: text nullable
+#    timestamp: timestamp
+#    teacher_id: id foreign
+#    group_id: id foreign
+#    subject_id: id foreign
+#    classroom_id: id foreign
+#    lesson_type_id: id foreign
+#
+#  Attendance:
+#    attendance_option_id: id foreign nullable
+#    student_id: id foreign
+#    lesson_id: id foreign
+#
+#  InviteCode:
+#    code: string
+#    user_id: id foreign
+
+# new
+#  Topic:
+#    subject_id: id foreign
+#    name: string
+#    hours: integer
+
+#  GradeMonth:
+#    attendance_option_id: id foreign
+#    student_id: id foreign
+#    subject_id: id foreign
+#    date: date
+#
+  GradeSemester:
+    attendance_option_id: id foreign
+    student_id: id foreign
+    subject_id: id foreign
+    semester_id: id foreign
+
+
+#  GradeYear
+
+
+
+#  Teacher:
+#    user_id: id foreign
+#    relationships:
+#      belongsToMany: Subject
+#
+#  Subject:
+#    specialty_id: id foreign
+#    name: string
+#    hours: integer
+#    relationships:
+#      belongsToMany: Teacher
+#
+#  TeacherSubject:
+#    subject_id: id foreign
+#    teacher_id: id foreign
+
+#  TeacherGroupSubject:
+#    subject_teacher_id: id foreign
+#    group_id: id foreign
+
+
+#  Sbt:
+#      specialty_id: id foreign
+#      name: string
+#      hours: integer
+#      relationships:
+#        belongsToMany: Semester
+#
+#  Semester:
+#    number: integer
+#    relationships:
+#      belongsToMany: Sbt
