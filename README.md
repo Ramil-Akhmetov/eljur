@@ -1,5 +1,19 @@
 # Электронный журнал для учета успеваемости студентов
 
+## Версия PHP 8.3
+
+Необходимые расширения для работы (файл php.ini):
+
+```ini
+extension=curl
+extension=fileinfo
+extension=mbstring
+extension=openssl
+extension=pdo_mysql
+extension=zip
+```
+
+
 ## Установка
 
 Установите зависимости
